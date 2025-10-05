@@ -1,0 +1,12 @@
+def hex_key(num):
+    # Prime hex digits: 2, 3, 5, 7, B (11), D (13)
+    prime_hex_digits = [Char('2'), Char('3'), Char('5'), Char('7'), Char('B'), Char('D')]
+
+    # Convert num to String if it's a symbol
+    num_str = String(num)
+
+    # Count how many characters in num_str are in prime_hex_digits
+    # Use vectorized approach: check each char against prime set
+    result = sum([1 if char in prime_hex_digits else 0 for char in num_str])
+
+    return result

@@ -1,0 +1,28 @@
+def int_to_mini_roman(number: int) -> str:
+    """
+    Convert a positive integer to lowercase Roman numeral string.
+    Restrictions: 1 <= number <= 1000
+    """
+    # Define values and their roman numeral equivalents in descending order
+    values = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+    numerals = [String("m"), String("cm"), String("d"), String("cd"),
+                String("c"), String("xc"), String("l"), String("xl"),
+                String("x"), String("ix"), String("v"), String("iv"), String("i")]
+
+    result = String("")
+    remaining = number
+
+    # Process each value-numeral pair
+    i = 0
+    while i < len(values):
+        val = values[i]
+        numeral = numerals[i]
+
+        # Add the numeral as many times as the value fits
+        while remaining >= val:
+            result = np.concatenate([result, numeral])
+            remaining -= val
+
+        i += 1
+
+    return result

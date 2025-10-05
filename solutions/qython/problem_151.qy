@@ -1,0 +1,16 @@
+def double_the_difference(lst):
+    if len(lst) == 0:
+        return 0
+
+    total = 0
+    i = 0
+    while i < len(lst):
+        x = lst[i]
+        # Check if positive, integer, and odd
+        if x > 0 and x == np.floor(x):
+            remainder = int(x) % 2
+            if remainder == 1:
+                total += int(x * x)
+        i += 1
+
+    return total

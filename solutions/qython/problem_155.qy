@@ -1,0 +1,15 @@
+def even_odd_count(num):
+    # Convert to absolute value to handle negative numbers
+    num_abs = abs(num)
+
+    # Convert to String to get individual digits as characters
+    digits_str = String(str(num_abs))
+
+    # Convert each character to integer
+    digits = [int(d) for d in digits_str]
+
+    # Count even and odd digits using vectorized operations
+    even_count = int(np.sum([d % 2 == 0 for d in digits]))
+    odd_count = int(np.sum([d % 2 == 1 for d in digits]))
+
+    return (even_count, odd_count)

@@ -1,0 +1,21 @@
+def closest_integer(val):
+    num = float(val)
+
+    # Get floor using modulo
+    floored = num - (num % 1)
+    frac = num - floored  # This is always >= 0
+
+    # For rounding away from zero when at 0.5:
+    if frac == 0.5:
+        if num >= 0:
+            # Positive: round up
+            return int(floored) + 1
+        else:
+            # Negative: round down (away from zero)
+            return int(floored)
+    else:
+        # Normal rounding
+        if frac < 0.5:
+            return int(floored)
+        else:
+            return int(floored) + 1

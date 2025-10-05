@@ -1,0 +1,47 @@
+def do_algebra(operator, operand):
+    # We need to respect operator precedence
+    # Precedence: ** (highest), * //, + - (lowest)
+
+    # Create a working copy of operands (convert to float for calculations)
+    nums = [float(x) for x in operand]
+    ops = [x for x in operator]
+
+    # First pass: handle ** (exponentiation) from left to right
+    i = 0
+    while i < len(ops):
+        if ops[i] is String('**'):
+            nums[i] = nums[i] ** nums[i+1]
+            nums = np.concatenate([nums[:i+1], nums[i+2:]])
+            ops = np.concatenate([ops[:i], ops[i+1:]])
+        else:
+            i += 1
+
+    # Second pass: handle * and // from left to right
+    i = 0
+    while i < len(ops):
+        if ops[i] is String('*'):
+            nums[i] = nums[i] * nums[i+1]
+            nums = np.concatenate([nums[:i+1], nums[i+2:]])
+            ops = np.concatenate([ops[:i], ops[i+1:]])
+        elif ops[i] is String('//'):
+            nums[i] = float(int(nums[i] // nums[i+1]))
+            nums = np.concatenate([nums[:i+1], nums[i+2:]])
+            ops = np.concatenate([ops[:i], ops[i+1:]])
+        else:
+            i += 1
+
+    # Third pass: handle + and - from left to right
+    i = 0
+    while i < len(ops):
+        if ops[i] is String('+'):
+            nums[i] = nums[i] + nums[i+1]
+            nums = np.concatenate([nums[:i+1], nums[i+2:]])
+            ops = np.concatenate([ops[:i], ops[i+1:]])
+        elif ops[i] is String('-'):
+            nums[i] = nums[i] - nums[i+1]
+            nums = np.concatenate([nums[:i+1], nums[i+2:]])
+            ops = np.concatenate([ops[:i], ops[i+1:]])
+        else:
+            i += 1
+
+    return int(nums[0])

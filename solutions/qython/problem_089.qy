@@ -1,0 +1,8 @@
+def encrypt(s):
+    """Encrypt a string using Caesar cipher with shift of 4."""
+    alphabet = String('abcdefghijklmnopqrstuvwxyz')
+
+    # For each character, find its position and shift by 4 with wrapping
+    shifted = [alphabet[(ord(c) - ord(Char('a')) + 4) % 26] for c in s]
+
+    return String("").join(shifted)

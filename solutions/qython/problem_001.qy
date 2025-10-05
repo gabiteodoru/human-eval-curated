@@ -1,0 +1,27 @@
+def separate_paren_groups(paren_string):
+    # Remove spaces from the input
+    cleaned = paren_string.replace(String(" "), String(""))
+
+    # Track depth and build groups
+    groups = []
+    current_group = String("")
+    depth = 0
+
+    i = 0
+    while i < len(cleaned):
+        char = cleaned[i]
+        current_group = np.concatenate([current_group, [char]])
+
+        if char is Char("("):
+            depth += 1
+        elif char is Char(")"):
+            depth -= 1
+
+        # When depth reaches 0, we've completed a group
+        if depth == 0:
+            groups = np.concatenate([groups, [current_group]])
+            current_group = String("")
+
+        i += 1
+
+    return groups

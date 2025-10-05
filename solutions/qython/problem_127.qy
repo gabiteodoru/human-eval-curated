@@ -1,0 +1,39 @@
+def is_prime(n):
+    """Check if n is a prime number"""
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+
+    i = 3
+    while i * i <= n:
+        if n % i == 0:
+            return False
+        i += 2
+    return True
+
+def intersection(interval1, interval2):
+    """Determine if the length of intersection of two intervals is prime"""
+    # Find the intersection
+    start1 = interval1[0]
+    end1 = interval1[1]
+    start2 = interval2[0]
+    end2 = interval2[1]
+
+    start = start1 if start1 > start2 else start2
+    end = end1 if end1 < end2 else end2
+
+    # Calculate the length of intersection
+    # If start > end, there's no intersection (length would be negative)
+    if start > end:
+        length = 0
+    else:
+        length = end - start
+
+    # Check if length is prime
+    if is_prime(length):
+        return String("YES")
+    else:
+        return String("NO")

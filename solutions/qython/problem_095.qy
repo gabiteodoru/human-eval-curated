@@ -1,0 +1,27 @@
+def check_dict_case(d):
+    # Return False if dictionary is empty
+    if len(d) is 0:
+        return False
+
+    # Get all keys
+    keys_list = d.keys()
+
+    # Check if all keys are strings (Char type in q)
+    is_string_checks = [type(k) is "Char" for k in keys_list]
+    all_strings = is_string_checks.all()
+
+    if not all_strings:
+        return False
+
+    # Now check if all are lowercase or all are uppercase
+    # Keys are symbols, convert to String for comparison
+    key_strings = [String(k) for k in keys_list]
+
+    # Check each key if it's lowercase/uppercase
+    is_lower = [k is k.lower() for k in key_strings]
+    is_upper = [k is k.upper() for k in key_strings]
+
+    all_lower = is_lower.all()
+    all_upper = is_upper.all()
+
+    return all_lower or all_upper

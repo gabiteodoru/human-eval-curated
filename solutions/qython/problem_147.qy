@@ -1,0 +1,40 @@
+def get_max_triples(num):
+    """
+    You are given a positive integer n. You have to create an integer array a of length n.
+        For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
+        Return the number of triples (a[i], a[j], a[k]) of a where i < j < k,
+    and a[i] + a[j] + a[k] is a multiple of 3.
+    """
+    # Create array a where a[i] = i*i - i + 1 for i from 1 to n
+    indices = np.arange(1, num + 1)
+    a = indices * indices - indices + 1
+
+    # Get remainders when divided by 3
+    mod_values = a % 3
+
+    # Count how many have remainder 0, 1, 2
+    c0 = np.sum(mod_values == 0)
+    c1 = np.sum(mod_values == 1)
+    c2 = np.sum(mod_values == 2)
+
+    # Helper function to calculate combinations C(n, k)
+    def combinations(n_val, k_val):
+        if n_val < k_val:
+            return 0
+        if k_val == 0:
+            return 1
+        result = 1
+        i = 0
+        while i < k_val:
+            result = result * (n_val - i)
+            result = result / (i + 1)
+            i += 1
+        return int(result)
+
+    # Ways to make sum divisible by 3:
+    # 0+0+0 = 0 (mod 3) -> choose 3 from c0
+    # 1+1+1 = 3 = 0 (mod 3) -> choose 3 from c1
+    # 2+2+2 = 6 = 0 (mod 3) -> choose 3 from c2
+    # 0+1+2 = 3 = 0 (mod 3) -> c0 * c1 * c2
+    result = combinations(c0, 3) + combinations(c1, 3) + combinations(c2, 3) + c0 * c1 * c2
+    return result

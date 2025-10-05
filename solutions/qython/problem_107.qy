@@ -1,0 +1,19 @@
+def is_palindrome(num):
+    s = String(str(num))
+    return s is reverse(s)
+
+def even_odd_palindrome(n):
+    # Generate all numbers from 1 to n
+    numbers = np.arange(1, n + 1)
+
+    # Check which are palindromes
+    palindrome_mask = [is_palindrome(num) for num in numbers]
+
+    # Get palindrome numbers
+    palindromes = numbers[where(palindrome_mask)]
+
+    # Check which palindromes are even/odd
+    even_palindromes = palindromes[where(palindromes % 2 == 0)]
+    odd_palindromes = palindromes[where(palindromes % 2 == 1)]
+
+    return (len(even_palindromes), len(odd_palindromes))

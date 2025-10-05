@@ -1,0 +1,4 @@
+def rescale_to_unit(numbers):
+    min_val = np.min(numbers)
+    max_val = np.max(numbers)
+    return (numbers - min_val) / (max_val - min_val)

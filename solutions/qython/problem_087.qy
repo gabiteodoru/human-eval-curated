@@ -1,0 +1,35 @@
+def get_row(lst, x):
+    result = []
+
+    # Process each row with enumerate
+    i = 0
+    while i < len(lst):
+        row = lst[i]
+
+        # Find all column indices where value equals x
+        matches = where(row == x)
+
+        # Create coordinate pairs [row_idx, col_idx] for each match
+        j = 0
+        while j < len(matches):
+            col_idx = matches[j]
+            result = np.concatenate([result, [[i, col_idx]]])
+            j += 1
+
+        i += 1
+
+    # Sort by row (ascending), then by column (descending)
+    if len(result) == 0:
+        return result
+
+    result_array = result
+    row_vals = result_array[:, 0]
+    col_vals = result_array[:, 1]
+
+    # Create sort keys: row ascending, column descending
+    # For descending column, we negate the values
+    sort_indices = np.argsort(row_vals * 1000 - col_vals)
+
+    sorted_result = [result[idx] for idx in sort_indices]
+
+    return sorted_result

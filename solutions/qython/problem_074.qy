@@ -1,0 +1,8 @@
+def total_match(lst1, lst2):
+    # Calculate total character count for each list
+    # For each string in the list, we need to get its length and sum them
+    total1 = np.sum([len(s) for s in lst1]) if len(lst1) > 0 else 0
+    total2 = np.sum([len(s) for s in lst2]) if len(lst2) > 0 else 0
+
+    # Return the list with smaller total, or first list if equal
+    return lst1 if total1 <= total2 else lst2

@@ -1,0 +1,4 @@
+def right_angle_triangle(a, b, c):
+    # Check all three permutations of Pythagorean theorem
+    # since we don't know which side is the hypotenuse
+    return (a*a + b*b == c*c) or (a*a + c*c == b*b) or (b*b + c*c == a*a)

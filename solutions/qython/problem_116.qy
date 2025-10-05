@@ -1,0 +1,21 @@
+def count_ones(n):
+    """Count number of 1s in binary representation"""
+    if n < 0:
+        return 0
+    ones = 0
+    while n > 0:
+        ones += n % 2
+        n = n // 2
+    return ones
+
+def sort_array(arr):
+    """
+    In this Kata, you have to sort an array of non-negative integers according to
+    number of ones in their binary representation in ascending order.
+    For similar number of ones, sort based on decimal value.
+    """
+    ones_counts = [count_ones(x) for x in arr]
+    sort_keys = [(ones_counts[i], arr[i]) for i in range(len(arr))]
+    sorted_keys = sorted(sort_keys)
+    result = [x[1] for x in sorted_keys]
+    return result

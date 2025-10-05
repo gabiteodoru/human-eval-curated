@@ -1,0 +1,5 @@
+def add_elements(arr, k):
+    first_k = arr[:k]
+    mask = first_k.within(-99, 99)
+    filtered = first_k[where(mask)]
+    return np.sum(filtered)

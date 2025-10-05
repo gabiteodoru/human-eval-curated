@@ -1,0 +1,4 @@
+def make_a_pile(n):
+    indices = np.arange(n)
+    result = n + 2 * indices
+    return result

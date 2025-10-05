@@ -1,0 +1,5 @@
+def sum_squares(lst):
+    """Sum of squared numbers, rounding each element up first (ceiling)."""
+    ceiled = np.ceil(lst)
+    squared = ceiled * ceiled
+    return np.sum(squared)

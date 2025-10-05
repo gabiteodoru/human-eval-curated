@@ -1,0 +1,23 @@
+def pluck(arr):
+    # If array is empty, return empty list
+    if len(arr) == 0:
+        return []
+
+    # Find even values
+    evens_mask = arr % 2 == 0
+    even_indices = where(evens_mask)
+
+    # If no even values, return empty list
+    if len(even_indices) == 0:
+        return []
+
+    # Get the even values
+    evens = arr[even_indices]
+
+    # Find the minimum even value
+    min_even = np.min(evens)
+
+    # Find the index of the first occurrence of min_even in original array
+    min_idx = arr.index(min_even)
+
+    return [min_even, min_idx]

@@ -1,0 +1,14 @@
+def digitSum(s):
+    """Sum ASCII codes of uppercase characters only"""
+    # Convert to String if needed
+    text = String(s) if isinstance(s, str) else s
+
+    # Handle empty string case
+    if len(text) == 0:
+        return 0
+
+    # Check each character: is it uppercase?
+    # A character is uppercase if it's in the range 'A' to 'Z'
+    ascii_values = [ord(c) if (c >= Char('A')) and (c <= Char('Z')) else 0 for c in text]
+
+    return np.sum(ascii_values)

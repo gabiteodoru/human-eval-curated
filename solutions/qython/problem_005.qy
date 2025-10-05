@@ -1,0 +1,14 @@
+def intersperse(numbers, delimeter):
+    if len(numbers) <= 1:
+        return numbers
+
+    result = []
+
+    i = 0
+    while i < len(numbers) - 1:
+        result = np.concatenate([result, [numbers[i], delimeter]])
+        i += 1
+
+    result = np.concatenate([result, [numbers[len(numbers) - 1]]])
+
+    return result

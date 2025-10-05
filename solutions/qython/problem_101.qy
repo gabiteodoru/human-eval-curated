@@ -1,0 +1,8 @@
+def words_string(s):
+    # Replace commas with spaces
+    s = s.replace(String(","), String(" "))
+    # Split by spaces and filter out empty strings
+    words = s.split(String(" "))
+    # Filter out empty strings
+    result = filter(lambda w: len(w) > 0, words)
+    return result

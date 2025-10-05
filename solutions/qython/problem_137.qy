@@ -1,0 +1,27 @@
+def compare_one(a, b):
+    """
+    Compare two values and return the larger one in its original type.
+    Return None if they are equal.
+    """
+    # Helper function to convert value to float for comparison
+    def to_float(val):
+        if isinstance(val, float):
+            return val
+        elif isinstance(val, int):
+            return float(val)
+        else:
+            # It's a String, need to replace comma with dot
+            str_val = val.replace(String(","), String("."))
+            return float(str(str_val))
+
+    # Convert both to float for comparison
+    a_num = to_float(a)
+    b_num = to_float(b)
+
+    # Compare
+    if a_num > b_num:
+        return a
+    elif b_num > a_num:
+        return b
+    else:
+        return None

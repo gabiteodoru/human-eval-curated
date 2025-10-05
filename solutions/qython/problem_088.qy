@@ -1,0 +1,13 @@
+def sort_array(arr):
+    # Handle empty or single-element arrays
+    if len(arr) <= 1:
+        return arr
+
+    # Calculate sum of first and last elements
+    total = arr[0] + arr[len(arr) - 1]
+
+    # Sort ascending if sum is odd, descending if even
+    if total % 2 == 1:
+        return sorted(arr)
+    else:
+        return reverse(sorted(arr))

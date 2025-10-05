@@ -1,0 +1,4 @@
+def remove_vowels(text):
+    vowels = String("aeiouAEIOU")
+    result = [char for char in text if char not in vowels]
+    return String("").join(result)

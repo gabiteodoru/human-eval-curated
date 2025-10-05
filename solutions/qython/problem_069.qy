@@ -1,0 +1,15 @@
+def search(lst):
+    # Get unique values and their frequencies
+    unique_vals = np.unique(lst)
+
+    # For each unique value, count its frequency
+    frequencies = [np.sum(lst == val) for val in unique_vals]
+
+    # Find values where frequency >= value itself
+    valid_vals = [unique_vals[i] for i in range(len(unique_vals)) if frequencies[i] >= unique_vals[i]]
+
+    # Return the greatest valid value, or -1 if none exist
+    if len(valid_vals) > 0:
+        return np.max(valid_vals)
+    else:
+        return -1

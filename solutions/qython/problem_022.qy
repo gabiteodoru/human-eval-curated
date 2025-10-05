@@ -1,0 +1,4 @@
+def filter_integers(values):
+    """Filter given list of any python values only for integers"""
+    result = [x for x in values if isinstance(x, int)]
+    return result

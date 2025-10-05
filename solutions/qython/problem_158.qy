@@ -1,0 +1,13 @@
+def find_max(words):
+    # Count unique characters for each word
+    unique_counts = [len(np.unique(word)) for word in words]
+
+    # Find the maximum count
+    max_count = max(unique_counts)
+
+    # Filter words with max unique count
+    candidates = [words[i] for i in range(len(words)) if unique_counts[i] == max_count]
+
+    # Sort lexicographically and return first
+    sorted_candidates = sorted(candidates)
+    return sorted_candidates[0]

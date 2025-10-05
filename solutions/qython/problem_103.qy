@@ -1,0 +1,30 @@
+def rounded_avg(n, m):
+    if n > m:
+        return -1
+
+    # Calculate sum of integers from n to m
+    total = np.sum(np.arange(n, m + 1))
+    cnt = m - n + 1
+    average = total / cnt
+
+    # Round to nearest integer
+    rounded = round(average)
+
+    # Convert to binary string
+    binary_str = String("0b")
+    num = rounded
+
+    if num == 0:
+        return String("0b0")
+
+    # Build binary representation
+    bits = []
+    while num > 0:
+        bits = np.concatenate([[num % 2], bits])
+        num = num // 2
+
+    # Convert bits to string
+    bit_chars = [String(str(int(b))) for b in bits]
+    binary_part = String("").join(bit_chars)
+
+    return np.concatenate([binary_str, binary_part])

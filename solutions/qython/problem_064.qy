@@ -1,0 +1,14 @@
+def vowels_count(s):
+    """Count vowels in string. 'y' counts only at the end."""
+    vowels = String("aeiouAEIOU")
+
+    # Count regular vowels
+    total = np.sum([Char(c) in vowels for c in s])
+
+    # Check if last character is 'y' or 'Y'
+    if len(s) > 0:
+        last_char = s[len(s) - 1]
+        if last_char is Char('y') or last_char is Char('Y'):
+            total += 1
+
+    return total

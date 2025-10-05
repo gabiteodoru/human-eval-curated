@@ -1,0 +1,4 @@
+def will_it_fly(q, w):
+    is_palindrome = q is reverse(q)
+    total_weight = np.sum(q)
+    return is_palindrome and (total_weight <= w)

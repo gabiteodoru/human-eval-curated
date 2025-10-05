@@ -1,0 +1,31 @@
+def encode(message):
+    text = message
+    result = message
+
+    vowels_lower = [Char('a'), Char('e'), Char('i'), Char('o'), Char('u')]
+    vowels_upper = [Char('A'), Char('E'), Char('I'), Char('O'), Char('U')]
+    replacements_lower = [Char('C'), Char('G'), Char('K'), Char('Q'), Char('W')]
+    replacements_upper = [Char('c'), Char('g'), Char('k'), Char('q'), Char('w')]
+    uppercase_letters = String(string.ascii_uppercase)
+
+    n = len(text)
+    i = 0
+    while i < n:
+        char = text[i]
+
+        if char is Char(' '):
+            result[i] = char
+        elif char in vowels_lower:
+            idx = vowels_lower.index(char)
+            result[i] = replacements_lower[idx]
+        elif char in vowels_upper:
+            idx = vowels_upper.index(char)
+            result[i] = replacements_upper[idx]
+        elif char in uppercase_letters:
+            result[i] = char.lower()
+        else:
+            result[i] = char.upper()
+
+        i += 1
+
+    return result

@@ -1,0 +1,14 @@
+def parse_music(music_string):
+    notes = music_string.split()
+
+    def note_to_beats(note):
+        if note is String('o'):
+            return 4
+        elif note is String('o|'):
+            return 2
+        elif note is String('.|'):
+            return 1
+        else:
+            return 0
+
+    return map(note_to_beats, notes)

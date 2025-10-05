@@ -1,0 +1,4 @@
+below_threshold:{[lst;t]
+    "Return True if all numbers in the list lst are below threshold t.";
+    :all[lst < t]
+    }

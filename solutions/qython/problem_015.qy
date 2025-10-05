@@ -1,0 +1,14 @@
+def string_sequence(n):
+    """ Return a string containing space-delimited numbers starting from 0 upto n inclusive.
+    >>> string_sequence(0)
+    String('0')
+    >>> string_sequence(5)
+    String('0 1 2 3 4 5')
+    """
+    # Create array of numbers from 0 to n inclusive
+    nums = np.arange(n + 1)
+    # Convert numbers to strings
+    str_nums = [str(num) for num in nums]
+    # Join with space
+    result = String(" ").join(str_nums)
+    return result

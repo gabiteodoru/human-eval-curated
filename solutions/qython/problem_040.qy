@@ -1,0 +1,27 @@
+def triples_sum_to_zero(lst):
+    """
+    triples_sum_to_zero takes a list of integers as an input.
+    it returns True if there are three distinct elements in the list that
+    sum to zero, and False otherwise.
+    """
+    n = len(lst)
+
+    # Need at least 3 elements
+    if n < 3:
+        return False
+
+    # Use three nested loops with indices to find distinct elements
+    # i < j < k ensures distinct positions
+    i = 0
+    while i < n - 2:
+        j = i + 1
+        while j < n - 1:
+            k = j + 1
+            while k < n:
+                if lst[i] + lst[j] + lst[k] == 0:
+                    return True
+                k += 1
+            j += 1
+        i += 1
+
+    return False

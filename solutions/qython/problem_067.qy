@@ -1,0 +1,27 @@
+def extract_number(word):
+    """Try to convert a word to int, return 0 if it fails"""
+    # Check if all characters are digits
+    if len(word) == 0:
+        return 0
+
+    is_digit_array = [char.within(Char('0'), Char('9')) for char in word]
+
+    if is_digit_array.all():
+        return int(word)
+    else:
+        return 0
+
+def fruit_distribution(s, n):
+    """
+    Extract numbers from string s and subtract from n to get mangos
+    """
+    # Split the string into words
+    words = s.split()
+
+    # Extract numbers from each word
+    numbers = [extract_number(word) for word in words]
+
+    # Filter out zeros and sum
+    result = n - np.sum(numbers)
+
+    return result

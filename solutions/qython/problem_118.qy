@@ -1,0 +1,27 @@
+def is_vowel(c):
+    vowels = String("aeiouAEIOU")
+    return (vowels == c).any()
+
+def get_closest_vowel(word):
+    # Need at least 3 characters (consonant-vowel-consonant)
+    if len(word) < 3:
+        return String("")
+
+    # Iterate from right to left, but skip the first and last characters
+    # Start from len(word)-2 (second to last) and go down to 1 (second from beginning)
+    i = len(word) - 2
+    while i >= 1:
+        current = word[i]
+        left = word[i - 1]
+        right = word[i + 1]
+
+        # Check if current is vowel and neighbors are consonants
+        if is_vowel(current) and not is_vowel(left) and not is_vowel(right):
+            # Return as a single-character String
+            result = String("")
+            result = np.concatenate([result, [current]])
+            return result
+
+        i -= 1
+
+    return String("")

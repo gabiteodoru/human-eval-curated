@@ -1,0 +1,19 @@
+def minSubArraySum(nums):
+    """
+    Given an array of integers nums, find the minimum sum of any non-empty sub-array
+    of nums.
+    """
+    # Using Kadane's algorithm for minimum subarray sum
+    min_ending_here = nums[0]
+    min_so_far = nums[0]
+
+    i = 1
+    while i < len(nums):
+        # Either extend the existing subarray or start a new one
+        candidate = min_ending_here + nums[i]
+        min_ending_here = nums[i] if nums[i] < candidate else candidate
+        # Update the overall minimum
+        min_so_far = min_ending_here if min_ending_here < min_so_far else min_so_far
+        i += 1
+
+    return min_so_far

@@ -1,0 +1,18 @@
+def select_words(s, n):
+    # If string is empty, return empty list
+    if len(s) == 0:
+        return []
+
+    # Split string into words
+    words = s.split()
+
+    # Count consonants in each word
+    def count_consonants(word):
+        vowels = String("aeiouAEIOU")
+        consonant_mask = [char not in vowels for char in word]
+        return np.sum(consonant_mask)
+
+    # Filter words that have exactly n consonants
+    result = [word for word in words if count_consonants(word) == n]
+
+    return result

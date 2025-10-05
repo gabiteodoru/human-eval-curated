@@ -1,0 +1,13 @@
+def median(l):
+    """Return median of elements in the list l."""
+    sorted_l = sorted(l)
+    n = len(sorted_l)
+
+    if n % 2 == 1:
+        # Odd number of elements - return middle element
+        return sorted_l[n // 2]
+    else:
+        # Even number of elements - return average of two middle elements
+        mid1 = sorted_l[n // 2 - 1]
+        mid2 = sorted_l[n // 2]
+        return (mid1 + mid2) / 2.0

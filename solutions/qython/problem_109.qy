@@ -1,0 +1,29 @@
+def move_one_ball(arr):
+    # Empty array case
+    if len(arr) == 0:
+        return True
+
+    # Count the number of positions where arr[i] > arr[i+1]
+    # This is a "break point" in the sorted order
+    breaks = 0
+    break_idx = -1
+
+    i = 0
+    while i < len(arr) - 1:
+        if arr[i] > arr[i + 1]:
+            breaks += 1
+            break_idx = i
+        i += 1
+
+    # If already sorted (no breaks), return True
+    if breaks == 0:
+        return True
+
+    # If more than one break, can't be fixed by rotation
+    if breaks > 1:
+        return False
+
+    # Exactly one break: check if rotation would work
+    # After rotation, the last element moves to front
+    # So we need: last element <= first element
+    return arr[len(arr) - 1] <= arr[0]

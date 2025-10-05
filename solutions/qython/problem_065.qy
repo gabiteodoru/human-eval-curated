@@ -1,0 +1,16 @@
+def circular_shift(x, shift):
+    digits = String(str(x))
+    num_digits = len(digits)
+
+    if shift > num_digits:
+        return reverse(digits)
+
+    shift = shift % num_digits
+
+    if shift == 0:
+        return digits
+
+    left_part = digits[:num_digits - shift]
+    right_part = digits[num_digits - shift:]
+
+    return np.concatenate([right_part, left_part])

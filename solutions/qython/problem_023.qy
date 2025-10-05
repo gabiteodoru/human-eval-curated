@@ -1,0 +1,3 @@
+def strlen(text):
+    """ Return length of given string """
+    return len(text)

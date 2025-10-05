@@ -1,0 +1,11 @@
+def solution(lst):
+    """Given a non-empty list of integers, return the sum of all of the odd elements that are in even positions."""
+    # Get elements at even positions (0, 2, 4, ...)
+    even_positions = lst[::2]
+
+    # Filter for odd elements
+    odd_mask = (even_positions % 2) != 0
+    odd_at_even_pos = even_positions[where(odd_mask)]
+
+    # Return sum
+    return np.sum(odd_at_even_pos)

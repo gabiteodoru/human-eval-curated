@@ -1,0 +1,28 @@
+def specialFilter(nums):
+    # Handle empty input
+    if len(nums) == 0:
+        return 0
+
+    # Filter numbers > 10
+    greater_than_10 = nums > 10
+
+    # Get first and last digits
+    def get_first_digit(n):
+        s = String(str(abs(int(n))))
+        return int(s[0])
+
+    def get_last_digit(n):
+        return abs(int(n)) % 10
+
+    first_digits = map(get_first_digit, nums)
+    last_digits = map(get_last_digit, nums)
+
+    # Check if digits are odd (1, 3, 5, 7, 9)
+    first_is_odd = (first_digits % 2) == 1
+    last_is_odd = (last_digits % 2) == 1
+
+    # Combine all conditions
+    valid = greater_than_10 & first_is_odd & last_is_odd
+
+    # Count valid numbers
+    return int(np.sum(valid))

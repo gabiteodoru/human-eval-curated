@@ -1,0 +1,18 @@
+def fibfib(n):
+    if n == 0:
+        return 0
+    if n == 1:
+        return 0
+    if n == 2:
+        return 1
+
+    # Use array to store values iteratively
+    values = [0, 0, 1]
+
+    i = 3
+    while i <= n:
+        next_val = values[i-1] + values[i-2] + values[i-3]
+        values = np.concatenate([values, [next_val]])
+        i += 1
+
+    return values[n]

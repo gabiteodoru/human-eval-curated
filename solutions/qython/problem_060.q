@@ -1,0 +1,4 @@
+sum_to_n:{[n]
+    "sum_to_n is a function that sums numbers from 1 to n.";
+    :.qython.int[(n*n+1)%2]
+    }

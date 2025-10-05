@@ -1,0 +1,35 @@
+def sorted_list_sum(lst):
+    # Filter strings with even lengths only
+    even_length = [s for s in lst if len(s) % 2 == 0]
+
+    if len(even_length) == 0:
+        return []
+
+    # Get lengths and convert strings for sorting
+    lengths = [len(s) for s in even_length]
+
+    # Sort indices by length first
+    sorted_indices = np.argsort(lengths)
+
+    # Apply the sorted indices
+    result = [even_length[i] for i in sorted_indices]
+
+    # Now we need to sort alphabetically within same length groups
+    # Group by length and sort each group
+    final_result = []
+    i = 0
+    while i < len(result):
+        current_len = len(result[i])
+        # Collect all strings of same length
+        same_len_group = []
+        j = i
+        while j < len(result) and len(result[j]) == current_len:
+            same_len_group = np.concatenate([same_len_group, [result[j]]])
+            j += 1
+
+        # Sort this group alphabetically
+        sorted_group = sorted(same_len_group)
+        final_result = np.concatenate([final_result, sorted_group])
+        i = j
+
+    return final_result

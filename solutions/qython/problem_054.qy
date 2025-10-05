@@ -1,0 +1,11 @@
+def same_chars(s0, s1):
+    """
+    Check if two words have the same characters.
+    """
+    # Get unique characters from each string and sort them
+    unique0 = np.sort(np.unique(s0))
+    unique1 = np.sort(np.unique(s1))
+
+    # Check if the sorted unique character sets are equal
+    # Use 'is' for whole-array equality, not '=='
+    return unique0 is unique1

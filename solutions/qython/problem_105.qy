@@ -1,0 +1,27 @@
+def by_length(arr):
+    # Create mapping dictionary for digits to names
+    digit_map = {
+        1: String("One"),
+        2: String("Two"),
+        3: String("Three"),
+        4: String("Four"),
+        5: String("Five"),
+        6: String("Six"),
+        7: String("Seven"),
+        8: String("Eight"),
+        9: String("Nine")
+    }
+
+    # Filter: keep only integers between 1 and 9 inclusive
+    filtered = [x for x in arr if (x >= 1) and (x <= 9)]
+
+    # Sort the filtered array
+    sorted_arr = sorted(filtered)
+
+    # Reverse the sorted array
+    reversed_arr = reverse(sorted_arr)
+
+    # Map each digit to its name
+    result = [digit_map[x] for x in reversed_arr]
+
+    return result

@@ -1,0 +1,18 @@
+def decode_shift(s):
+    """
+    takes as input string encoded with encode_shift function. Returns decoded string.
+    """
+    # Convert to String for character manipulation
+    text = String(s)
+
+    # Shift each character back by 5 positions
+    # Use vectorized operations on the character array
+    char_codes = [ord(ch) for ch in text]
+
+    # Decode by shifting back 5 positions (wrapping around alphabet)
+    decoded_codes = [((code - ord(Char("a")) - 5) % 26) + ord(Char("a")) for code in char_codes]
+
+    # Convert back to characters and join
+    decoded_chars = [Char(chr(code)) for code in decoded_codes]
+
+    return String("").join(decoded_chars)

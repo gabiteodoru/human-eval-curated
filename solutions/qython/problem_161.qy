@@ -1,0 +1,28 @@
+def solve(s):
+    lowercase = String(string.ascii_lowercase)
+    uppercase = String(string.ascii_uppercase)
+
+    # Helper to swap case
+    def swap_case(c):
+        if c.within(Char('a'), Char('z')):
+            # Lowercase letter - find index and return uppercase
+            idx = lowercase.index(c)
+            return uppercase[idx]
+        elif c.within(Char('A'), Char('Z')):
+            # Uppercase letter - find index and return lowercase
+            idx = uppercase.index(c)
+            return lowercase[idx]
+        else:
+            # Not a letter
+            return c
+
+    # Check if string contains any letters
+    has_letters = np.any([c.within(Char('A'), Char('Z')) or c.within(Char('a'), Char('z')) for c in s])
+
+    if not has_letters:
+        # No letters - reverse the string
+        return reverse(s)
+    else:
+        # Has letters - swap case for letters, keep non-letters
+        result = [swap_case(c) for c in s]
+        return String("").join(result)

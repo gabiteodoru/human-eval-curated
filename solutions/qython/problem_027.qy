@@ -1,0 +1,7 @@
+def flip_case(s):
+    """ For a given string, flip lowercase characters to uppercase and uppercase to lowercase.
+    >>> flip_case(String('Hello'))
+    String('hELLO')
+    """
+    result = [Char(c.upper()) if c in string.ascii_lowercase else Char(c.lower()) for c in s]
+    return String("").join(result)

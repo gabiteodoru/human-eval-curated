@@ -1,0 +1,22 @@
+def is_sorted(lst):
+    # Handle empty or single element lists
+    if len(lst) <= 1:
+        return True
+
+    # Check if sorted in ascending order
+    sorted_check = np.all(lst[:-1] <= lst[1:])
+
+    if not sorted_check:
+        return False
+
+    # Check for more than 1 duplicate of any number
+    unique_vals = np.unique(lst)
+
+    # Count occurrences for each unique value
+    counts = [np.sum(lst == val) for val in unique_vals]
+
+    # If any value appears more than 2 times, return False
+    if np.any(counts > 2):
+        return False
+
+    return True

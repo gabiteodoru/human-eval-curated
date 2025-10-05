@@ -1,0 +1,5 @@
+def count_distinct_characters(text):
+    """Given a string, find out how many distinct characters (regardless of case) does it consist of"""
+    lowercase_text = text.lower()
+    distinct_chars = np.unique(lowercase_text)
+    return len(distinct_chars)

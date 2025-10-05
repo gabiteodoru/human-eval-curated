@@ -1,0 +1,13 @@
+def monotonic(l):
+    """Return True is list elements are monotonically increasing or decreasing."""
+    if len(l) <= 1:
+        return True
+
+    # Check if monotonically increasing
+    diffs = np.diff(l)
+    is_increasing = np.all(diffs >= 0)
+
+    # Check if monotonically decreasing
+    is_decreasing = np.all(diffs <= 0)
+
+    return is_increasing or is_decreasing

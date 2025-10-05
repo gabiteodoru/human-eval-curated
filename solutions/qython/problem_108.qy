@@ -1,0 +1,38 @@
+def sum_of_digits(n):
+    """Calculate sum of signed digits where first digit of negative number is negative"""
+    if n == 0:
+        return 0
+
+    # Get absolute value to extract digits
+    abs_n = abs(n)
+
+    # Convert to String to get digits
+    digits_str = String(str(abs_n))
+
+    # Calculate sum of digits
+    total = sum([int(Char(d)) for d in digits_str])
+
+    # If original number was negative, subtract twice the first digit
+    # (once to remove it from positive sum, once to make it negative)
+    if n < 0:
+        first_digit = int(Char(digits_str[0]))
+        total = total - 2 * first_digit
+
+    return total
+
+def count_nums(arr):
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    """
+    # Handle empty array
+    if len(arr) == 0:
+        return 0
+
+    # Use vectorized approach: map the sum_of_digits function over the array
+    # then count how many are > 0
+    digit_sums = [sum_of_digits(x) for x in arr]
+    result = sum([1 if ds > 0 else 0 for ds in digit_sums])
+    return result

@@ -1,0 +1,21 @@
+def solve(n):
+    # Convert number to string to access digits
+    digits_str = String(str(n))
+
+    # Sum all digits (convert each char to int)
+    digit_sum = sum([int(char) for char in digits_str])
+
+    # Convert to binary manually
+    if digit_sum == 0:
+        return String("0")
+
+    binary_digits = []
+    num = digit_sum
+    while num > 0:
+        binary_digits = np.concatenate([[num % 2], binary_digits])
+        num = num // 2
+
+    # Convert list of digits to string
+    result = String("").join([String(str(d)) for d in binary_digits])
+
+    return result

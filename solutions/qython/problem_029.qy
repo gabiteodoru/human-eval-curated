@@ -1,0 +1,11 @@
+def filter_by_prefix(strings, prefix):
+    if len(strings) == 0:
+        return []
+
+    prefix_len = len(prefix)
+
+    # For each string, check if it starts with the prefix
+    # We'll use a list comprehension with a condition
+    result = [s for s in strings if len(s) >= prefix_len and s[:prefix_len] is prefix]
+
+    return result

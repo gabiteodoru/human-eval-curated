@@ -1,0 +1,17 @@
+def simplify(x, n):
+    # Parse x fraction
+    x_parts = x.split(String("/"))
+    x_num = int(x_parts[0])
+    x_den = int(x_parts[1])
+
+    # Parse n fraction
+    n_parts = n.split(String("/"))
+    n_num = int(n_parts[0])
+    n_den = int(n_parts[1])
+
+    # Multiply fractions: (x_num/x_den) * (n_num/n_den) = (x_num*n_num)/(x_den*n_den)
+    result_num = x_num * n_num
+    result_den = x_den * n_den
+
+    # Check if result is whole number (numerator divisible by denominator)
+    return result_num % result_den == 0

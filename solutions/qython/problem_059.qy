@@ -1,0 +1,23 @@
+def largest_prime_factor(num):
+    """Return the largest prime factor of n. Assume n > 1 and is not a prime."""
+    n = num
+    largest = -1
+
+    # Handle factor 2
+    while n % 2 == 0:
+        largest = 2
+        n = n // 2
+
+    # Check odd factors starting from 3
+    i = 3
+    while i * i <= n:
+        while n % i == 0:
+            largest = i
+            n = n // i
+        i += 2
+
+    # If n is still greater than 1, then it's a prime factor
+    if n > 1:
+        largest = n
+
+    return largest

@@ -1,0 +1,4 @@
+def filter_by_substring(strings, substr):
+    """Filter strings that contain the given substring"""
+    result = [s for s in strings if substr in s]
+    return result

@@ -1,0 +1,22 @@
+exchange:{[lst1;lst2]
+    "In this problem, you will implement a function that takes two lists of numbers,
+    and determines whether it is possible to perform an exchange of elements
+    between them to make lst1 a list of only even numbers.
+    There is no limit on the number of exchanged elements between lst1 and lst2.
+    If it is possible to exchange elements between the lst1 and lst2 to make
+    all the elements of lst1 to be even, return String(\"YES\").
+    Otherwise, return String(\"NO\").
+    For example:
+    exchange([1, 2, 3, 4], [1, 2, 3, 4]) => String(\"YES\")
+    exchange([1, 2, 3, 4], [1, 5, 3, 4]) => String(\"NO\")
+    It is assumed that the input lists will be non-empty.
+    ";
+    evens_in_lst1:sum[(lst1 mod 2) = 0];
+    evens_in_lst2:sum[(lst2 mod 2) = 0];
+    total_evens:evens_in_lst1+evens_in_lst2;
+    needed:count[lst1];
+    $[total_evens >= needed;
+        :"YES";
+        :"NO"
+      ]
+    }

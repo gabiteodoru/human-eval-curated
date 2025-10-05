@@ -1,0 +1,15 @@
+def digits(num):
+    # Convert number to string to get individual digits
+    num_str = str(num)
+
+    # Extract digits as integers
+    digit_list = [int(Char(c)) for c in String(num_str)]
+
+    # Filter odd digits
+    odd_digits = [d for d in digit_list if d % 2 == 1]
+
+    # Return product or 0 if no odd digits
+    if len(odd_digits) == 0:
+        return 0
+    else:
+        return np.prod(odd_digits)

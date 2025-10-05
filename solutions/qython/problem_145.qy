@@ -1,0 +1,26 @@
+def digit_sum(n):
+    """Calculate sum of digits, handling negative numbers specially"""
+    if n < 0:
+        s = String(str(abs(n)))
+        digits = [int(Char(s[i])) for i in range(len(s))]
+        result = -digits[0] + np.sum(digits[1:])
+        return result
+    else:
+        s = String(str(n))
+        digits = [int(Char(s[i])) for i in range(len(s))]
+        return np.sum(digits)
+
+def order_by_points(nums):
+    """
+    Sort integers by sum of their digits.
+    Maintain original order for equal sums (stable sort).
+    """
+    if len(nums) == 0:
+        return []
+
+    indices = [i for i in range(len(nums))]
+    digit_sums = [digit_sum(nums[i]) for i in range(len(nums))]
+    pairs = [(digit_sums[i], indices[i], nums[i]) for i in range(len(nums))]
+    sorted_pairs = sorted(pairs)
+    result = [pair[2] for pair in sorted_pairs]
+    return result

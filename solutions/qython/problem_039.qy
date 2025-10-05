@@ -1,0 +1,28 @@
+def is_prime(num):
+    if num < 2:
+        return False
+    if num == 2:
+        return True
+    if num % 2 == 0:
+        return False
+    i = 3
+    while i * i <= num:
+        if num % i == 0:
+            return False
+        i += 2
+    return True
+
+def prime_fib(n):
+    fib_a = 1
+    fib_b = 2
+    prime_count = 0
+
+    while True:
+        if is_prime(fib_b):
+            prime_count += 1
+            if prime_count == n:
+                return fib_b
+
+        fib_next = fib_a + fib_b
+        fib_a = fib_b
+        fib_b = fib_next

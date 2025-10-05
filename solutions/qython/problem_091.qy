@@ -1,0 +1,35 @@
+def normalize_delimiters(S):
+    # Convert ?, ! to .
+    def replace_char(c):
+        if c is Char("?") or c is Char("!"):
+            return Char(".")
+        else:
+            return c
+
+    return map(replace_char, S)
+
+def starts_with_i(sentence):
+    stripped = sentence.strip()
+    if len(stripped) > 0:
+        first_char = stripped[0]
+        is_i = first_char is Char("I")
+        if is_i:
+            if len(stripped) == 1:
+                return 1
+            else:
+                second_char = stripped[1]
+                is_space = second_char is Char(" ")
+                if is_space:
+                    return 1
+    return 0
+
+def is_bored(S):
+    # Replace all sentence delimiters with periods
+    text = normalize_delimiters(S)
+
+    # Split by periods
+    sentences = text.split(String("."))
+
+    # Map the function and sum
+    boredom_counts = map(starts_with_i, sentences)
+    return np.sum(boredom_counts)

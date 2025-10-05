@@ -1,0 +1,28 @@
+def is_prime(n):
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    i = 3
+    while i * i <= n:
+        if n % i == 0:
+            return False
+        i += 2
+    return True
+
+def is_multiply_prime(a):
+    i = 2
+    while i * i * i <= a:
+        if a % i == 0 and is_prime(i):
+            remainder = a // i
+            j = i
+            while j * j <= remainder:
+                if remainder % j == 0 and is_prime(j):
+                    k = remainder // j
+                    if is_prime(k):
+                        return True
+                j += 1
+        i += 1
+    return False

@@ -1,0 +1,5 @@
+def concatenate(strings):
+    """ Concatenate list of strings into a single string """
+    if len(strings) == 0:
+        return String("")
+    return String("").join(strings)

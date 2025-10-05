@@ -1,0 +1,22 @@
+def split_words(txt):
+    # Check if whitespace exists
+    has_whitespace = np.any([c is Char(' ') for c in txt])
+
+    if has_whitespace:
+        return txt.split()
+
+    # Check if comma exists
+    has_comma = np.any([c is Char(',') for c in txt])
+
+    if has_comma:
+        return txt.split(String(','))
+
+    # Count lowercase letters with odd order in alphabet
+    # ord('a') = 0, ord('b') = 1, etc. We want odd positions: b, d, f, h, ...
+    lowercase_chars = String(string.ascii_lowercase)
+    is_lower = [c in lowercase_chars for c in txt]
+    positions = [ord(c) - ord(Char('a')) if is_lower[i] else 0 for i, c in enumerate(txt)]
+    is_odd = [(positions[i] % 2 == 1) if is_lower[i] else False for i in range(len(positions))]
+    n = np.sum(is_odd)
+
+    return n

@@ -1,0 +1,17 @@
+def largest_smallest_integers(lst):
+    # Convert to array for vectorized operations
+    arr = np.array(lst)
+
+    # Find negative integers
+    negatives = arr[where(arr < 0)]
+
+    # Find positive integers
+    positives = arr[where(arr > 0)]
+
+    # Get largest negative (closest to zero, so max of negatives)
+    largest_neg = max(negatives) if len(negatives) > 0 else None
+
+    # Get smallest positive (min of positives)
+    smallest_pos = min(positives) if len(positives) > 0 else None
+
+    return (largest_neg, smallest_pos)

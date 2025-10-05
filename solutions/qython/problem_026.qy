@@ -1,0 +1,15 @@
+def remove_duplicates(numbers):
+    """ From a list of integers, remove all elements that occur more than once.
+    Keep order of elements left the same as in the input.
+    """
+    # Count occurrences of each number
+    unique_nums = np.unique(numbers)
+    counts = [np.sum(numbers == num) for num in unique_nums]
+
+    # Create a set of numbers that appear exactly once
+    nums_to_keep = [unique_nums[i] for i in range(len(unique_nums)) if counts[i] == 1]
+
+    # Filter original list keeping order
+    result = [num for num in numbers if num in nums_to_keep]
+
+    return result

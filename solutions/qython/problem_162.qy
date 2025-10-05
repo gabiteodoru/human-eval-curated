@@ -1,0 +1,8 @@
+def string_to_md5(text):
+    """
+    Given a string String('text'), return its md5 hash equivalent string.
+    If String('text') is an empty string, return None.
+    """
+    if len(text) == 0:
+        return None
+    return string_to_md5_string(text)

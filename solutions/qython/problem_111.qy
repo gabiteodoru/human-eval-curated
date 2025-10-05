@@ -1,0 +1,34 @@
+def histogram(test):
+    """Given a string representing a space separated lowercase letters, return a dictionary
+    of the letter with the most repetition and containing the corresponding count.
+    If several letters have the same occurrence, return all of them.
+    """
+    # Handle empty string
+    if test is String(""):
+        return {}
+
+    # Split the string into words
+    words = test.split()
+
+    # Get unique words
+    unique_words = np.unique(words)
+
+    # Count each unique word
+    def count_occurrences(word):
+        matches = [np.array_equal(w, word) for w in words]
+        return np.sum(matches)
+
+    counts = [count_occurrences(w) for w in unique_words]
+
+    # Find the maximum count
+    max_count = np.max(counts)
+
+    # Build result dictionary with words that have max count
+    result = {}
+    i = 0
+    while i < len(unique_words):
+        if counts[i] == max_count:
+            result[unique_words[i]] = counts[i]
+        i += 1
+
+    return result

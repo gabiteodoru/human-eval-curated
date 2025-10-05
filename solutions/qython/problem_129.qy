@@ -1,0 +1,42 @@
+def minPath(grid, k):
+    n = len(grid)
+
+    # Flatten the grid using np.concatenate
+    flat_grid = np.concatenate(grid)
+
+    # Find the index of 1
+    idx_of_1 = flat_grid.index(1)
+
+    # Convert flat index back to 2D coordinates
+    i1 = idx_of_1 // n
+    j1 = idx_of_1 % n
+
+    # Get neighbors
+    neighbors = []
+
+    if i1 > 0:
+        neighbors = np.concatenate([neighbors, [flat_grid[(i1 - 1) * n + j1]]])
+
+    if i1 < n - 1:
+        neighbors = np.concatenate([neighbors, [flat_grid[(i1 + 1) * n + j1]]])
+
+    if j1 > 0:
+        neighbors = np.concatenate([neighbors, [flat_grid[i1 * n + (j1 - 1)]]])
+
+    if j1 < n - 1:
+        neighbors = np.concatenate([neighbors, [flat_grid[i1 * n + (j1 + 1)]]])
+
+    # Find minimum neighbor
+    min_neighbor = int(min(neighbors))
+
+    # Build path alternating between 1 and min_neighbor
+    result = []
+    idx = 0
+    while idx < k:
+        if idx % 2 == 0:
+            result = np.concatenate([result, [1]])
+        else:
+            result = np.concatenate([result, [min_neighbor]])
+        idx += 1
+
+    return [int(x) for x in result]

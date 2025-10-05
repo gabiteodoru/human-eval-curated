@@ -1,0 +1,19 @@
+def is_happy(s):
+    """Check if a string is happy (length >= 3 and every 3 consecutive letters are distinct)"""
+    # First check if length is at least 3
+    if len(s) < 3:
+        return False
+
+    # Check each 3-character window
+    # For a string of length n, we need to check n-2 windows
+    i = 0
+    while i <= len(s) - 3:
+        # Get 3 consecutive characters
+        window = s[i:i+3]
+        # Check if all 3 characters are distinct
+        # They are distinct if the number of unique characters is 3
+        if len(np.unique(window)) != 3:
+            return False
+        i += 1
+
+    return True

@@ -1,0 +1,10 @@
+car_race_collision:{[num_cars]
+    "
+    Calculate the number of collisions between n cars moving left to right
+    and n cars moving right to left.
+
+    Each car moving left-to-right will collide with each car moving right-to-left.
+    So with n cars in each direction, there are n * n = n² collisions.
+    ";
+    :num_cars*num_cars
+    }

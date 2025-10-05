@@ -1,0 +1,16 @@
+def longest(strings):
+    # Handle empty list
+    if len(strings) == 0:
+        return None
+
+    # Get lengths of all strings
+    lengths = [len(s) for s in strings]
+
+    # Find the maximum length
+    max_length = max(lengths)
+
+    # Find the index of the first string with max length
+    idx = lengths.index(max_length)
+
+    # Return the string at that index
+    return strings[idx]

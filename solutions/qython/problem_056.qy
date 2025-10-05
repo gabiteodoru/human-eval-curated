@@ -1,0 +1,10 @@
+def correct_bracketing(brackets):
+    # Convert brackets to array of +1 and -1
+    values = [1 if char is Char("<") else -1 for char in brackets]
+
+    # Calculate cumulative sum to track depth
+    depth = np.cumsum(values)
+
+    # Check if depth ever goes negative (closing before opening)
+    # and if final depth is 0 (all brackets matched)
+    return (np.min(depth) >= 0) and (depth[-1] == 0)

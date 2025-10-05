@@ -1,0 +1,18 @@
+def has_close_elements(numbers, threshold):
+    """Check if any two numbers are closer than threshold."""
+    n = len(numbers)
+
+    # For each pair of elements, check if their absolute difference is less than threshold
+    # We can use broadcasting: for each element, compute distances to all other elements
+    idx = 0
+    while idx < n:
+        current = numbers[idx]
+        # Check distances to all elements after current index
+        other_idx = idx + 1
+        while other_idx < n:
+            if abs(current - numbers[other_idx]) < threshold:
+                return True
+            other_idx += 1
+        idx += 1
+
+    return False

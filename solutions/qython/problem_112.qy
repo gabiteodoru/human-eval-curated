@@ -1,0 +1,8 @@
+def reverse_delete(s, c):
+    # Filter out characters that are in c
+    result = String("").join([char for char in s if char not in c])
+
+    # Check if palindrome
+    is_palindrome = result is reverse(result)
+
+    return (result, is_palindrome)

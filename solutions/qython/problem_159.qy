@@ -1,0 +1,5 @@
+def eat(number, need, remaining):
+    can_eat = need if need < remaining else remaining
+    total_eaten = number + can_eat
+    remaining_after = remaining - can_eat
+    return [total_eaten, remaining_after]

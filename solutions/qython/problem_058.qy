@@ -1,0 +1,2 @@
+def common(l1, l2):
+    return sorted(np.intersect1d(l1, l2))

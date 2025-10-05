@@ -1,0 +1,33 @@
+def sort_numbers(numbers):
+    word_to_num = {
+        "zero": 0,
+        "one": 1,
+        "two": 2,
+        "three": 3,
+        "four": 4,
+        "five": 5,
+        "six": 6,
+        "seven": 7,
+        "eight": 8,
+        "nine": 9
+    }
+
+    # Split the string into words
+    words = numbers.split()
+
+    # If empty or only whitespace, return empty string
+    if len(words) == 0:
+        return String("")
+
+    # Map words to their numeric values - convert String to symbol first
+    nums = [word_to_num.get(str(w)) for w in words]
+
+    # Get sorted indices
+    sorted_indices = np.argsort(nums)
+
+    # Reorder words using sorted indices
+    sorted_words = [words[i] for i in sorted_indices]
+
+    # Join back into a string
+    result = String(" ").join(sorted_words)
+    return result

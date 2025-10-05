@@ -1,0 +1,19 @@
+def strange_sort_list(lst):
+    if len(lst) == 0:
+        return []
+
+    result = []
+    remaining = sorted(lst)
+    use_min = True
+
+    while len(remaining) > 0:
+        if use_min:
+            val = remaining[0]
+            remaining = remaining[1:]
+        else:
+            val = remaining[len(remaining) - 1]
+            remaining = remaining[:len(remaining) - 1]
+        result = np.concatenate([result, [val]])
+        use_min = not use_min
+
+    return result

@@ -1,0 +1,38 @@
+def file_name_check(file_name):
+    # Convert to String if needed
+    fname = String(file_name) if isinstance(file_name, str) else file_name
+
+    # Check for exactly one dot
+    dot_count = np.sum([c is Char('.') for c in fname])
+    if dot_count != 1:
+        return String('No')
+
+    # Split by dot
+    parts = fname.split(String('.'))
+    name_part = parts[0]
+    ext_part = parts[1]
+
+    # Check if name part is empty
+    if len(name_part) == 0:
+        return String('No')
+
+    # Check if name starts with a letter
+    first_char = name_part[0]
+    is_letter = (ord(first_char) >= ord(Char('a')) and ord(first_char) <= ord(Char('z'))) or \
+                (ord(first_char) >= ord(Char('A')) and ord(first_char) <= ord(Char('Z')))
+    if not is_letter:
+        return String('No')
+
+    # Count digits in the full filename
+    digit_count = np.sum([c.within(Char('0'), Char('9')) for c in fname])
+    if digit_count > 3:
+        return String('No')
+
+    # Check extension - use any with list comprehension
+    valid_exts = [String('txt'), String('exe'), String('dll')]
+    ext_valid = [ext_part is ext for ext in valid_exts].any()
+
+    if not ext_valid:
+        return String('No')
+
+    return String('Yes')

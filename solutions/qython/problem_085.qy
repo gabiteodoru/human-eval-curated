@@ -1,0 +1,12 @@
+def add(lst):
+    # Get indices that are odd
+    odd_indices = where(np.arange(len(lst)) % 2 == 1)
+
+    # Get values at odd indices
+    values_at_odd = lst[odd_indices]
+
+    # Filter for even values
+    even_values = values_at_odd[where(values_at_odd % 2 == 0)]
+
+    # Sum them
+    return int(np.sum(even_values))

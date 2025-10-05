@@ -1,0 +1,25 @@
+def parse_nested_parens(paren_string):
+    """Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens(String('(()()) ((())) () ((())()())'))
+    [2, 3, 1, 3]
+    """
+
+    def max_depth_group(paren_str):
+        """Calculate maximum nesting depth for a single group of parentheses"""
+        # Convert each parenthesis to +1 or -1
+        increments = [1 if c is Char('(') else -1 for c in paren_str]
+
+        # Cumulative sum gives depth at each position
+        depths = np.cumsum(increments)
+
+        # Maximum depth is the maximum value in cumulative sum
+        return np.max(depths)
+
+    # Split by spaces to get individual groups
+    groups = paren_string.split()
+
+    # Map max_depth_group function to each group
+    return map(max_depth_group, groups)

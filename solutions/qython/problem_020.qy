@@ -1,0 +1,15 @@
+def find_closest_elements(numbers):
+    """ From a supplied list of numbers (of length at least two) select and return two that are the closest to each
+    other and return them in order (smaller number, larger number).
+    """
+    # Sort the numbers
+    sorted_nums = np.sort(numbers)
+
+    # Calculate differences between consecutive elements
+    diffs = np.diff(sorted_nums)
+
+    # Find the index of minimum difference
+    min_idx = np.argsort(diffs)[0]
+
+    # Return the pair with minimum difference
+    return (sorted_nums[min_idx], sorted_nums[min_idx + 1])

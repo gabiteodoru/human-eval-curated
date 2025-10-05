@@ -1,0 +1,27 @@
+def Strongest_Extension(class_name, extensions):
+    """Find the strongest extension based on uppercase - lowercase count"""
+
+    def calculate_strength(ext):
+        """Calculate strength: uppercase_count - lowercase_count"""
+        def is_uppercase(c):
+            return (c >= Char('A')) and (c <= Char('Z'))
+
+        def is_lowercase(c):
+            return (c >= Char('a')) and (c <= Char('z'))
+
+        cap = sum([1 if is_uppercase(c) else 0 for c in ext])
+        sm = sum([1 if is_lowercase(c) else 0 for c in ext])
+        return cap - sm
+
+    # Calculate strengths for all extensions
+    strengths = [calculate_strength(ext) for ext in extensions]
+
+    # Find the maximum strength
+    max_strength = max(strengths)
+
+    # Find the index of the first extension with maximum strength
+    max_index = strengths.index(max_strength)
+
+    # Return class_name.strongest_extension
+    result = np.concatenate([class_name, String("."), extensions[max_index]])
+    return result

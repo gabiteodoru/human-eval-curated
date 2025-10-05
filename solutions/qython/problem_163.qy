@@ -1,0 +1,17 @@
+def generate_integers(a, b):
+    """
+    Given two positive integers a and b, return the single-digit even numbers in the
+    closed interval [min(a,b), max(a,b)] (including endpoints), in ascending order.
+    """
+    # Find min and max using ternary operators
+    min_val = a if a < b else b
+    max_val = a if a > b else b
+
+    # Single-digit even numbers are 0, 2, 4, 6, 8
+    # Filter for those in range [min_val, max_val]
+    single_digit_evens = [0, 2, 4, 6, 8]
+
+    # Filter using list comprehension
+    result = [x for x in single_digit_evens if x >= min_val and x <= max_val]
+
+    return result

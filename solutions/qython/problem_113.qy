@@ -1,0 +1,11 @@
+def odd_count(lst):
+    def process_string(s):
+        # Count odd digits
+        odd_digits = sum([int(char) % 2 for char in s])
+        # Create formatted string
+        count_str = str(odd_digits)
+        template = String("the number of odd elements Xn the strXng X of the Xnput.")
+        result = template.replace(String("X"), String(count_str))
+        return result
+
+    return map(process_string, lst)

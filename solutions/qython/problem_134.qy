@@ -1,0 +1,22 @@
+def check_if_last_char_is_a_letter(txt):
+    # Empty string case
+    if len(txt) == 0:
+        return False
+
+    # Get last character
+    last_char = txt[len(txt) - 1]
+
+    # Check if last character is alphabetical
+    is_alpha = (last_char >= Char('a') and last_char <= Char('z')) or (last_char >= Char('A') and last_char <= Char('Z'))
+
+    if not is_alpha:
+        return False
+
+    # If only one character, it's not part of a word (it IS the word, but problem says "not part of a word")
+    # Based on examples, single letter should return True (it's isolated)
+    if len(txt) == 1:
+        return True
+
+    # Check if preceded by space (not part of a word)
+    prev_char = txt[len(txt) - 2]
+    return prev_char is Char(' ')

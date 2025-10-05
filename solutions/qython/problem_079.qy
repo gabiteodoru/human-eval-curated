@@ -1,0 +1,16 @@
+def decimal_to_binary(decimal):
+    """Convert decimal to binary with 'db' prefix and suffix"""
+    # Handle the number 0 separately
+    if decimal == 0:
+        return String("db0db")
+
+    # Convert to binary by repeatedly dividing by 2
+    binary_digits = []
+    n = decimal
+    while n > 0:
+        binary_digits = np.concatenate([[Char(str(n % 2))], binary_digits])
+        n = n // 2
+
+    # Create the result with 'db' prefix and suffix
+    result = np.concatenate([String("db"), binary_digits, String("db")])
+    return result

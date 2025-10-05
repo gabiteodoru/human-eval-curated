@@ -1,0 +1,14 @@
+def correct_bracketing(brackets):
+    # Convert to list of characters for processing
+    chars = [c for c in brackets]
+
+    # Map opening bracket to 1, closing bracket to -1
+    values = [1 if c is Char("(") else -1 for c in chars]
+
+    # Calculate cumulative sum - this tracks balance
+    cumsum = np.cumsum(values)
+
+    # Check two conditions:
+    # 1. Final sum must be 0 (equal opens and closes)
+    # 2. cumsum must never go negative (no closing before opening)
+    return cumsum[-1] == 0 and np.min(cumsum) >= 0

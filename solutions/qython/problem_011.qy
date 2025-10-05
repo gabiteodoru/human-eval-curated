@@ -1,0 +1,16 @@
+def string_xor(a, b):
+    """ Input are two strings a and b consisting only of 1s and 0s.
+    Perform binary XOR on these inputs and return result also as a string.
+    >>> string_xor(String('010'), String('110'))
+    String('100')
+    """
+    # Convert string characters to integers (0 or 1)
+    a_ints = [int(Char(c)) for c in a]
+    b_ints = [int(Char(c)) for c in b]
+
+    # XOR operation: a XOR b = (a + b) % 2
+    xor_result = (a_ints + b_ints) % 2
+
+    # Convert back to string
+    result_chars = [Char(str(int(x))) for x in xor_result]
+    return String("").join(result_chars)

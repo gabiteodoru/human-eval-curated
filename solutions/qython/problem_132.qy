@@ -1,0 +1,34 @@
+def is_nested(s):
+    n = len(s)
+
+    # Scan from left: track max depth of opening brackets
+    opening_count = 0
+    max_opening = 0
+    i = 0
+    while i < n:
+        if s[i] is Char('['):
+            opening_count += 1
+            if opening_count > max_opening:
+                max_opening = opening_count
+        else:
+            opening_count -= 1
+        i += 1
+
+    # Scan from right: track max depth of closing brackets
+    # When going right-to-left, ] increments and [ decrements
+    closing_count = 0
+    max_closing = 0
+    i = n - 1
+    while i >= 0:
+        if s[i] is Char(']'):
+            closing_count += 1
+            if closing_count > max_closing:
+                max_closing = closing_count
+        else:
+            closing_count -= 1
+            # Ensure we don't go negative when tracking max
+            if closing_count < 0:
+                closing_count = 0
+        i -= 1
+
+    return max_opening >= 2 and max_closing >= 2
