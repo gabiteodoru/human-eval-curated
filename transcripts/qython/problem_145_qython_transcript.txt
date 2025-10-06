@@ -1,0 +1,685 @@
+ENHANCED CONVERSATION TIMELINE
+================================================================================
+Total events: 31
+
+
+--- 1. Initial Prompt at 13:21:19 ---
+Please solve this HumanEval problem using Qython.
+
+============================================================
+Problem HumanEval/145
+============================================================
+
+def order_by_points(nums):
+    """
+    Write a function which sorts the given list of integers
+    in ascending order according to the sum of their digits.
+    Note: if there are several items with similar sum of their digits,
+    order them based on their index in original list.
+	For negative numbers, the first digit is negative and remaining digits are positive when calculating the sum.
+
+    For example:
+    >>> order_by_points([1, 11, -1, -11, -12]) == [-1, -11, 1, -12, 11]
+    >>> order_by_points([]) == []
+    """
+
+============================================================
+
+QYTHON IMPLEMENTATION NOTES:
+- PREFER VECTORIZED NUMPY OPERATIONS over loops whenever possible
+- Examples: np.sum(), np.min(), np.max(), np.where(), np.all(), np.any()
+- Array operations: element-wise comparisons, broadcasting, boolean indexing
+- If problem involves string manipulation, use mutable Strings and Chars
+- When testing, use String() constructor for string inputs
+- You are allowed to change parameter names (avoid reserved words)
+- Since you have access to running Qython, break down code into individual
+  functions and test them separately to debug issues
+- Connect to q server: mcp__qmcp__connect_to_q with host localhost:5001
+- Use Qython tools: mcp__qmcp__translate_and_run_qython for testing
+- Check help: mcp__qmcp__qython_help for reference (especially Common Gotchas)
+============================================================
+
+Function name: order_by_points
+
+Please:
+1. Connect to the q server on localhost:5001 using mcp__qmcp__connect_to_q
+2. Use the Qython tools to implement and test your solution
+3. Once you have a working Qython solution, write the Qython code to a file named "problem_solution_145.qy". The file should contain the Qython main function definition and any helper functions it needs to run. Avoid adding prints, asserts, or other testing code to the output script.
+
+Your solution should be complete and ready to run in a Qython environment.
+
+--- 2. Text Block (Message #1) at 13:21:22 ---
+I'll solve this HumanEval problem using Qython. Let me start by connecting to the q server and understanding the problem.
+
+--- 3. Tool Call: mcp__qmcp__connect_to_q (Message #1) at 13:21:22 ---
+  host:
+    localhost:5001
+
+--- 4. Tool Call: mcp__qmcp__qython_help (Message #1) at 13:21:23 ---
+  topic:
+    home
+
+--- 5. Text Block (Message #1) at 13:21:26 ---
+Now let me setup the Qython namespace and start implementing the solution:
+
+--- 6. Tool Call: mcp__qmcp__setup_qython_namespace (Message #1) at 13:21:26 ---
+  (no parameters)
+
+--- 7. Text Block (Message #1) at 13:21:30 ---
+Now let me analyze the problem:
+1. Sort integers by sum of their digits
+2. For negative numbers, the first digit is negative and remaining are positive
+3. If sums are equal, maintain original order (stable sort)
+
+Let me implement and test the solution step by step:
+
+--- 8. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 13:21:34 ---
+  qython_code:
+    
+    def digit_sum(n):
+        """Calculate sum of digits, handling negative numbers specially"""
+        if n < 0:
+            # For negative: first digit is negative, rest are positive
+            s = str(abs(n))
+            # First digit is negative
+            result = -int(s[0])
+            # Add remaining digits as positive
+            for i in range(1, len(s)):
+                result += int(s[i])
+            return result
+        else:
+            # For positive: just sum all digits
+            s = str(n)
+            result = 0
+            for i in range(len(s)):
+                result += int(s[i])
+            return result
+    
+    # Test the helper function
+    print(String("Testing digit_sum:"))
+    print(digit_sum(1))      # 1
+    print(digit_sum(11))     # 1+1=2
+    print(digit_sum(-1))     # -1
+    print(digit_sum(-11))    # -1+1=0
+    print(digit_sum(-12))    # -1+2=1
+    
+
+--- 9. Tool Result for mcp__qmcp__translate_and_run_qython (Event #8) at 13:21:34 ---
+Failed to translate Qython code: Unexpected token 'for' - check your syntax
+
+--- 10. Text Block (Message #1) at 13:21:37 ---
+Right, Qython doesn't support for loops. Let me rewrite using vectorized operations:
+
+--- 11. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 13:21:37 ---
+  qython_code:
+    
+    def digit_sum(n):
+        """Calculate sum of digits, handling negative numbers specially"""
+        if n < 0:
+            # For negative: first digit is negative, rest are positive
+            s = str(abs(n))
+            digits = [int(s[i]) for i in range(len(s))]
+            # First digit is negative, rest are positive
+            result = -digits[0] + np.sum(digits[1:])
+            return result
+        else:
+            # For positive: just sum all digits
+            s = str(n)
+            digits = [int(s[i]) for i in range(len(s))]
+            return np.sum(digits)
+    
+    # Test the helper function
+    print(String("Testing digit_sum:"))
+    print(digit_sum(1))      # 1
+    print(digit_sum(11))     # 1+1=2
+    print(digit_sum(-1))     # -1
+    print(digit_sum(-11))    # -1+1=0
+    print(digit_sum(-12))    # -1+2=1
+    
+
+--- 12. Tool Result for mcp__qmcp__translate_and_run_qython (Event #11) at 13:21:37 ---
+TRANSLATION:
+digit_sum:{[n]
+    "Calculate sum of digits, handling negative numbers specially";
+    $[n < 0;
+       [
+        s:.qython.str[abs[n]];
+        digits:{[s;i] .qython.int[s[i]]}[s] each .qython.arange[count[s]];
+        result:(neg digits[0])+(sum[1 _ digits]);
+        :result
+       ];
+       [
+        s:.qython.str[n];
+        digits:{[s;i] .qython.int[s[i]]}[s] each .qython.arange[count[s]];
+        :sum[digits]
+       ]
+      ]
+    };
+/ Test the helper function
+.qython.print["\"Testing digit_sum:\""];
+.qython.print["digit_sum[1]"]     ; / 1
+.qython.print["digit_sum[11]"]    ; / 1+1=2
+.qython.print["digit_sum[-1]"]    ; / -1
+.qython.print["digit_sum[-11]"]   ; / -1+1=0
+.qython.print["digit_sum[-12]"]    / -1+2=1
+
+EXECUTION RESULT:
+Testing digit_sum: 
+ Error: 1
+Trace:
+  [12] digit_sum@:{[s;i] .qython.int[s[i]]}
+                                     ^
+  [11] (.q.each)
+
+  [10] digit_sum:
+        s:.qython.str[n];
+        digits:{[s;i] .qython.int[s[i]]}[s] each .qython.arange[count[s]];
+                                            ^
+        :sum[digits]
+  [9]  digit_sum[1]
+       ^
+ 
+ Error: 11
+Trace:
+  [12] digit_sum@:{[s;i] .qython.int[s[i]]}
+                                     ^
+  [11] (.q.each)
+
+  [10] digit_sum:
+        s:.qython.str[n];
+        digits:{[s;i] .qython.int[s[i]]}[s] each .qython.arange[count[s]];
+                                            ^
+        :sum[digits]
+  [9]  digit_sum[11]
+       ^
+ 
+ Error: 1
+Trace:
+  [12] digit_sum@:{[s;i] .qython.int[s[i]]}
+                                     ^
+  [11] (.q.each)
+
+  [10] digit_sum:
+        s:.qython.str[abs[n]];
+        digits:{[s;i] .qython.int[s[i]]}[s] each .qython.arange[count[s]];
+                                            ^
+        result:(neg digits[0])+(sum[1 _ digits]);
+  [9]  digit_sum[-1]
+       ^
+ 
+ Error: 11
+Trace:
+  [12] digit_sum@:{[s;i] .qython.int[s[i]]}
+                                     ^
+  [11] (.q.each)
+
+  [10] digit_sum:
+        s:.qython.str[abs[n]];
+        digits:{[s;i] .qython.int[s[i]]}[s] each .qython.arange[count[s]];
+                                            ^
+        result:(neg digits[0])+(sum[1 _ digits]);
+  [9]  digit_sum[-11]
+       ^
+ 
+ Error: 12
+Trace:
+  [12] digit_sum@:{[s;i] .qython.int[s[i]]}
+                                     ^
+  [11] (.q.each)
+
+  [10] digit_sum:
+        s:.qython.str[abs[n]];
+        digits:{[s;i] .qython.int[s[i]]}[s] each .qython.arange[count[s]];
+                                            ^
+        result:(neg digits[0])+(sum[1 _ digits]);
+  [9]  digit_sum[-12]
+       ^
+ 
+
+None
+
+--- 13. Text Block (Message #1) at 13:21:41 ---
+The issue is that `str()` on an integer returns a symbol, not a String. Let me fix this:
+
+--- 14. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 13:21:45 ---
+  qython_code:
+    
+    def digit_sum(n):
+        """Calculate sum of digits, handling negative numbers specially"""
+        if n < 0:
+            # For negative: first digit is negative, rest are positive
+            s = String(str(abs(n)))
+            digits = [int(Char(s[i])) for i in range(len(s))]
+            # First digit is negative, rest are positive
+            result = -digits[0] + np.sum(digits[1:])
+            return result
+        else:
+            # For positive: just sum all digits
+            s = String(str(n))
+            digits = [int(Char(s[i])) for i in range(len(s))]
+            return np.sum(digits)
+    
+    # Test the helper function
+    print(String("Testing digit_sum:"))
+    print(digit_sum(1))      # 1
+    print(digit_sum(11))     # 1+1=2
+    print(digit_sum(-1))     # -1
+    print(digit_sum(-11))    # -1+1=0
+    print(digit_sum(-12))    # -1+2=1
+    
+
+--- 15. Tool Result for mcp__qmcp__translate_and_run_qython (Event #14) at 13:21:45 ---
+TRANSLATION:
+digit_sum:{[n]
+    "Calculate sum of digits, handling negative numbers specially";
+    $[n < 0;
+       [
+        s:.qython.String[.qython.str[abs[n]]];
+        digits:{[s;i] .qython.int[.qython.Char[s[i]]]}[s] each .qython.arange[count[s]];
+        result:(neg digits[0])+(sum[1 _ digits]);
+        :result
+       ];
+       [
+        s:.qython.String[.qython.str[n]];
+        digits:{[s;i] .qython.int[.qython.Char[s[i]]]}[s] each .qython.arange[count[s]];
+        :sum[digits]
+       ]
+      ]
+    };
+/ Test the helper function
+.qython.print["\"Testing digit_sum:\""];
+.qython.print["digit_sum[1]"]     ; / 1
+.qython.print["digit_sum[11]"]    ; / 1+1=2
+.qython.print["digit_sum[-1]"]    ; / -1
+.qython.print["digit_sum[-11]"]   ; / -1+1=0
+.qython.print["digit_sum[-12]"]    / -1+2=1
+
+EXECUTION RESULT:
+Testing digit_sum: 
+ 1 
+ 2 
+ -1 
+ 0 
+ 1 
+
+None
+
+--- 16. Text Block (Message #1) at 13:21:47 ---
+Perfect! Now let me implement the main function with stable sorting:
+
+--- 17. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 13:21:54 ---
+  qython_code:
+    
+    def digit_sum(n):
+        """Calculate sum of digits, handling negative numbers specially"""
+        if n < 0:
+            s = String(str(abs(n)))
+            digits = [int(Char(s[i])) for i in range(len(s))]
+            result = -digits[0] + np.sum(digits[1:])
+            return result
+        else:
+            s = String(str(n))
+            digits = [int(Char(s[i])) for i in range(len(s))]
+            return np.sum(digits)
+    
+    def order_by_points(nums):
+        """
+        Sort integers by sum of their digits.
+        Maintain original order for equal sums (stable sort).
+        """
+        if len(nums) == 0:
+            return []
+        
+        # Create pairs of (original_index, number, digit_sum)
+        indices = [i for i in range(len(nums))]
+        sums = [digit_sum(nums[i]) for i in range(len(nums))]
+        
+        # Create tuples (digit_sum, original_index, number)
+        # Sort by digit_sum first, then by original index for stability
+        pairs = [(sums[i], indices[i], nums[i]) for i in range(len(nums))]
+        
+        # Sort by (digit_sum, index)
+        sorted_pairs = sorted(pairs)
+        
+        # Extract just the numbers
+        result = [pair[2] for pair in sorted_pairs]
+        return result
+    
+    # Test cases
+    print(String("Test 1:"))
+    result1 = order_by_points([1, 11, -1, -11, -12])
+    print(result1)
+    print(String("Expected: [-1, -11, 1, -12, 11]"))
+    
+    print(String("
+    Test 2:"))
+    result2 = order_by_points([])
+    print(result2)
+    print(String("Expected: []"))
+    
+
+--- 18. Tool Result for mcp__qmcp__translate_and_run_qython (Event #17) at 13:21:54 ---
+TRANSLATION:
+digit_sum:{[n]
+    "Calculate sum of digits, handling negative numbers specially";
+    $[n < 0;
+       [
+        s:.qython.String[.qython.str[abs[n]]];
+        digits:{[s;i] .qython.int[.qython.Char[s[i]]]}[s] each .qython.arange[count[s]];
+        result:(neg digits[0])+(sum[1 _ digits]);
+        :result
+       ];
+       [
+        s:.qython.String[.qython.str[n]];
+        digits:{[s;i] .qython.int[.qython.Char[s[i]]]}[s] each .qython.arange[count[s]];
+        :sum[digits]
+       ]
+      ]
+    };
+order_by_points:{[nums]
+    "
+    Sort integers by sum of their digits.
+    Maintain original order for equal sums (stable sort).
+    ";
+    if[count[nums] = 0;
+        :()
+        ];
+    indices:{[i] i} each .qython.arange[count[nums]];
+    sums:{[digit_sum;nums;i] digit_sum[nums[i]]}[digit_sum;nums] each .qython.arange[count[nums]];
+    pairs:{[indices;nums;i] (sums[i];indices[i];nums[i])}[indices;nums] each .qython.arange[count[nums]];
+    sorted_pairs:asc[pairs];
+    result:{[pair] pair[2]} each sorted_pairs;
+    :result
+    };
+/ Test cases
+.qython.print["\"Test 1:\""];
+result1:order_by_points[(1;11;-1;-11;-12)];
+.qython.print["result1"];
+.qython.print["\"Expected: [-1, -11, 1, -12, 11]\""];
+.qython.print["\"\
+Test 2:\""];
+result2:order_by_points[()];
+.qython.print["result2"];
+.qython.print["\"Expected: []\""]
+/ 'sums' is a reserved built-in function. Using it as an assignment target in: sums:{[digit_sum;nums;i] digit_sum[nums[i]]}[digit_sum;nums] each .qython.arange[count[nums]] may cause unexpected behavior or conflicts.
+
+EXECUTION RESULT:
+Error: assign
+Trace:
+  [3]  
+    indices:{[i] i} each .qython.arange[count[nums]];
+    sums:{[digit_sum;nums;i] digit_sum[nums[i]]}[digit_sum;nums] each .qython.arange[count[nums]];
+        ^
+    pairs:{[indices;nums;i] (sums[i];indices[i];nums[i])}[indices;nums] each .qython.arange[count[nums]];
+
+
+--- 19. Text Block (Message #1) at 13:21:58 ---
+The variable name `sums` is reserved. Let me fix that:
+
+--- 20. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 13:22:03 ---
+  qython_code:
+    
+    def digit_sum(n):
+        """Calculate sum of digits, handling negative numbers specially"""
+        if n < 0:
+            s = String(str(abs(n)))
+            digits = [int(Char(s[i])) for i in range(len(s))]
+            result = -digits[0] + np.sum(digits[1:])
+            return result
+        else:
+            s = String(str(n))
+            digits = [int(Char(s[i])) for i in range(len(s))]
+            return np.sum(digits)
+    
+    def order_by_points(nums):
+        """
+        Sort integers by sum of their digits.
+        Maintain original order for equal sums (stable sort).
+        """
+        if len(nums) == 0:
+            return []
+        
+        # Create pairs of (original_index, number, digit_sum)
+        indices = [i for i in range(len(nums))]
+        digit_sums = [digit_sum(nums[i]) for i in range(len(nums))]
+        
+        # Create tuples (digit_sum, original_index, number)
+        # Sort by digit_sum first, then by original index for stability
+        pairs = [(digit_sums[i], indices[i], nums[i]) for i in range(len(nums))]
+        
+        # Sort by (digit_sum, index)
+        sorted_pairs = sorted(pairs)
+        
+        # Extract just the numbers
+        result = [pair[2] for pair in sorted_pairs]
+        return result
+    
+    # Test cases
+    print(String("Test 1:"))
+    result1 = order_by_points([1, 11, -1, -11, -12])
+    print(result1)
+    print(String("Expected: [-1, -11, 1, -12, 11]"))
+    
+    print(String("
+    Test 2:"))
+    result2 = order_by_points([])
+    print(result2)
+    print(String("Expected: []"))
+    
+
+--- 21. Tool Result for mcp__qmcp__translate_and_run_qython (Event #20) at 13:22:03 ---
+TRANSLATION:
+digit_sum:{[n]
+    "Calculate sum of digits, handling negative numbers specially";
+    $[n < 0;
+       [
+        s:.qython.String[.qython.str[abs[n]]];
+        digits:{[s;i] .qython.int[.qython.Char[s[i]]]}[s] each .qython.arange[count[s]];
+        result:(neg digits[0])+(sum[1 _ digits]);
+        :result
+       ];
+       [
+        s:.qython.String[.qython.str[n]];
+        digits:{[s;i] .qython.int[.qython.Char[s[i]]]}[s] each .qython.arange[count[s]];
+        :sum[digits]
+       ]
+      ]
+    };
+order_by_points:{[nums]
+    "
+    Sort integers by sum of their digits.
+    Maintain original order for equal sums (stable sort).
+    ";
+    if[count[nums] = 0;
+        :()
+        ];
+    indices:{[i] i} each .qython.arange[count[nums]];
+    digit_sums:{[digit_sum;nums;i] digit_sum[nums[i]]}[digit_sum;nums] each .qython.arange[count[nums]];
+    pairs:{[digit_sums;indices;nums;i] (digit_sums[i];indices[i];nums[i])}[digit_sums;indices;nums] each .qython.arange[count[nums]];
+    sorted_pairs:asc[pairs];
+    result:{[pair] pair[2]} each sorted_pairs;
+    :result
+    };
+/ Test cases
+.qython.print["\"Test 1:\""];
+result1:order_by_points[(1;11;-1;-11;-12)];
+.qython.print["result1"];
+.qython.print["\"Expected: [-1, -11, 1, -12, 11]\""];
+.qython.print["\"\
+Test 2:\""];
+result2:order_by_points[()];
+.qython.print["result2"];
+.qython.print["\"Expected: []\""]
+
+EXECUTION RESULT:
+Test 1: 
+ List_Int64([-1, -11, 1, -12, 11]) 
+ Expected: [-1, -11, 1, -12, 11] 
+ 
+Test 2: 
+ List_Untyped([]) 
+ Expected: [] 
+
+None
+
+--- 22. Text Block (Message #1) at 13:22:07 ---
+Excellent! The solution works correctly. Let me verify with a few more test cases to ensure it handles edge cases:
+
+--- 23. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 13:22:11 ---
+  qython_code:
+    
+    def digit_sum(n):
+        """Calculate sum of digits, handling negative numbers specially"""
+        if n < 0:
+            s = String(str(abs(n)))
+            digits = [int(Char(s[i])) for i in range(len(s))]
+            result = -digits[0] + np.sum(digits[1:])
+            return result
+        else:
+            s = String(str(n))
+            digits = [int(Char(s[i])) for i in range(len(s))]
+            return np.sum(digits)
+    
+    def order_by_points(nums):
+        """
+        Sort integers by sum of their digits.
+        Maintain original order for equal sums (stable sort).
+        """
+        if len(nums) == 0:
+            return []
+        
+        # Create pairs of (original_index, number, digit_sum)
+        indices = [i for i in range(len(nums))]
+        digit_sums = [digit_sum(nums[i]) for i in range(len(nums))]
+        
+        # Create tuples (digit_sum, original_index, number)
+        # Sort by digit_sum first, then by original index for stability
+        pairs = [(digit_sums[i], indices[i], nums[i]) for i in range(len(nums))]
+        
+        # Sort by (digit_sum, index)
+        sorted_pairs = sorted(pairs)
+        
+        # Extract just the numbers
+        result = [pair[2] for pair in sorted_pairs]
+        return result
+    
+    # Additional tests
+    print(String("Test 3 - single element:"))
+    print(order_by_points([5]))
+    
+    print(String("
+    Test 4 - all positive:"))
+    print(order_by_points([10, 1, 100, 11]))
+    
+    print(String("
+    Test 5 - stability check (same sums):"))
+    print(order_by_points([10, 100, 1000]))  # All have digit sum 1
+    
+    print(String("
+    Test 6 - negative numbers:"))
+    print(order_by_points([-99, -1, 0, 1, 99]))
+    
+
+--- 24. Tool Result for mcp__qmcp__translate_and_run_qython (Event #23) at 13:22:11 ---
+TRANSLATION:
+digit_sum:{[n]
+    "Calculate sum of digits, handling negative numbers specially";
+    $[n < 0;
+       [
+        s:.qython.String[.qython.str[abs[n]]];
+        digits:{[s;i] .qython.int[.qython.Char[s[i]]]}[s] each .qython.arange[count[s]];
+        result:(neg digits[0])+(sum[1 _ digits]);
+        :result
+       ];
+       [
+        s:.qython.String[.qython.str[n]];
+        digits:{[s;i] .qython.int[.qython.Char[s[i]]]}[s] each .qython.arange[count[s]];
+        :sum[digits]
+       ]
+      ]
+    };
+order_by_points:{[nums]
+    "
+    Sort integers by sum of their digits.
+    Maintain original order for equal sums (stable sort).
+    ";
+    if[count[nums] = 0;
+        :()
+        ];
+    indices:{[i] i} each .qython.arange[count[nums]];
+    digit_sums:{[digit_sum;nums;i] digit_sum[nums[i]]}[digit_sum;nums] each .qython.arange[count[nums]];
+    pairs:{[digit_sums;indices;nums;i] (digit_sums[i];indices[i];nums[i])}[digit_sums;indices;nums] each .qython.arange[count[nums]];
+    sorted_pairs:asc[pairs];
+    result:{[pair] pair[2]} each sorted_pairs;
+    :result
+    };
+/ Additional tests
+.qython.print["\"Test 3 - single element:\""];
+.qython.print["order_by_points[(enlist 5)]"];
+.qython.print["\"\
+Test 4 - all positive:\""];
+.qython.print["order_by_points[(10;1;100;11)]"];
+.qython.print["\"\
+Test 5 - stability check (same sums):\""];
+.qython.print["order_by_points[(10;100;1000)]"] ; / All have digit sum 1
+.qython.print["\"\
+Test 6 - negative numbers:\""];
+.qython.print["order_by_points[(-99;-1;0;1;99)]"]
+
+EXECUTION RESULT:
+Test 3 - single element: 
+ List_Int64([5]) 
+ 
+Test 4 - all positive: 
+ List_Int64([10, 1, 100, 11]) 
+ 
+Test 5 - stability check (same sums): 
+ List_Int64([10, 100, 1000]) 
+ 
+Test 6 - negative numbers: 
+ List_Int64([-1, -99, 0, 1, 99]) 
+
+None
+
+--- 25. Text Block (Message #1) at 13:22:15 ---
+Perfect! All tests pass. Now let me write the solution to the file:
+
+--- 26. Tool Call: Write (Message #1) at 13:22:20 ---
+  file_path:
+    /mnt/d/python/qhumaneval/problem_145_qython_session_0bfdb7cf/problem_solution_145.qy
+  content:
+    def digit_sum(n):
+        """Calculate sum of digits, handling negative numbers specially"""
+        if n < 0:
+            s = String(str(abs(n)))
+            digits = [int(Char(s[i])) for i in range(len(s))]
+            result = -digits[0] + np.sum(digits[1:])
+            return result
+        else:
+            s = String(str(n))
+            digits = [int(Char(s[i])) for i in range(len(s))]
+            return np.sum(digits)
+    
+    def order_by_points(nums):
+        """
+        Sort integers by sum of their digits.
+        Maintain original order for equal sums (stable sort).
+        """
+        if len(nums) == 0:
+            return []
+    
+        indices = [i for i in range(len(nums))]
+        digit_sums = [digit_sum(nums[i]) for i in range(len(nums))]
+        pairs = [(digit_sums[i], indices[i], nums[i]) for i in range(len(nums))]
+        sorted_pairs = sorted(pairs)
+        result = [pair[2] for pair in sorted_pairs]
+        return result
+    
+
+--- 27. Text Block (Message #1) at 13:22:24 ---
+Solution complete! The Qython implementation:
+
+1. **`digit_sum(n)`**: Calculates digit sum with special handling for negatives (first digit negative, rest positive)
+2. **`order_by_points(nums)`**: Sorts by digit sum while maintaining original order for equal sums using stable sort with index tuples
+
+The solution has been written to `problem_solution_145.qy`.

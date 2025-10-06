@@ -1,0 +1,784 @@
+ENHANCED CONVERSATION TIMELINE
+================================================================================
+Total events: 46
+
+
+--- 1. Initial Prompt at 14:41:00 ---
+Please solve this HumanEval problem using Qython.
+
+============================================================
+Problem HumanEval/161
+============================================================
+
+def solve(s):
+    """You are given a string s.
+    if s[i] is a letter, reverse its case from lower to upper or viceversa, 
+    otherwise keep it as it is.
+    If the string contains no letters, reverse the string.
+    The function should return the resulted string.
+    Examples
+    solve(String("1234")) = String("4321")
+    solve(String("ab")) = String("AB")
+    solve(String("#a@C")) = String("#A@c")
+    """
+
+============================================================
+
+QYTHON IMPLEMENTATION NOTES:
+- PREFER VECTORIZED NUMPY OPERATIONS over loops whenever possible
+- Examples: np.sum(), np.min(), np.max(), np.where(), np.all(), np.any()
+- Array operations: element-wise comparisons, broadcasting, boolean indexing
+- If problem involves string manipulation, use mutable Strings and Chars
+- When testing, use String() constructor for string inputs
+- You are allowed to change parameter names (avoid reserved words)
+- Since you have access to running Qython, break down code into individual
+  functions and test them separately to debug issues
+- Connect to q server: mcp__qmcp__connect_to_q with host localhost:5001
+- Use Qython tools: mcp__qmcp__translate_and_run_qython for testing
+- Check help: mcp__qmcp__qython_help for reference (especially Common Gotchas)
+============================================================
+
+Function name: solve
+
+Please:
+1. Connect to the q server on localhost:5001 using mcp__qmcp__connect_to_q
+2. Use the Qython tools to implement and test your solution
+3. Once you have a working Qython solution, write the Qython code to a file named "problem_solution_161.qy". The file should contain the Qython main function definition and any helper functions it needs to run. Avoid adding prints, asserts, or other testing code to the output script.
+
+Your solution should be complete and ready to run in a Qython environment.
+
+--- 2. Text Block (Message #1) at 14:41:03 ---
+I'll solve this HumanEval problem using Qython. Let me start by connecting to the q server and understanding the problem.
+
+--- 3. Tool Call: mcp__qmcp__connect_to_q (Message #1) at 14:41:03 ---
+  host:
+    localhost:5001
+
+--- 4. Tool Call: mcp__qmcp__qython_help (Message #1) at 14:41:06 ---
+  topic:
+    home
+
+--- 5. Text Block (Message #1) at 14:41:10 ---
+Now let me set up the Qython namespace and implement the solution:
+
+--- 6. Tool Call: mcp__qmcp__setup_qython_namespace (Message #1) at 14:41:10 ---
+  (no parameters)
+
+--- 7. Text Block (Message #1) at 14:41:13 ---
+Now let me analyze the problem and implement a solution:
+
+The problem asks to:
+1. If a character is a letter, reverse its case (lower↔upper)
+2. If not a letter, keep it as is
+3. If the string contains no letters at all, reverse the entire string
+
+Let me test this step by step:
+
+--- 8. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 14:41:16 ---
+  qython_code:
+    def solve(s):
+        # Check if string contains any letters
+        has_letters = np.any([c.isalpha() for c in s])
+        
+        if not has_letters:
+            # No letters - reverse the string
+            return reverse(s)
+        else:
+            # Has letters - swap case for letters, keep non-letters
+            result = [c.swapcase() if c.isalpha() else c for c in s]
+            return String("").join(result)
+    
+    # Test cases
+    print(solve(String("1234")))
+    print(solve(String("ab")))
+    print(solve(String("#a@C")))
+
+--- 9. Tool Result for mcp__qmcp__translate_and_run_qython (Event #8) at 14:41:16 ---
+Failed to translate Qython code: Unknown method: .isalpha()
+
+--- 10. Text Block (Message #1) at 14:41:20 ---
+I see, `.isalpha()` and `.swapcase()` are not available. Let me implement this using character comparisons:
+
+--- 11. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 14:41:23 ---
+  qython_code:
+    def is_upper(c):
+        return c.within(Char('A'), Char('Z'))
+    
+    def is_lower(c):
+        return c.within(Char('a'), Char('z'))
+    
+    def is_letter(c):
+        return is_upper(c) or is_lower(c)
+    
+    def swap_case(c):
+        if is_upper(c):
+            # Convert to lower: add 32 to ASCII value
+            return Char(chr(ord(c) + 32))
+        elif is_lower(c):
+            # Convert to upper: subtract 32 from ASCII value
+            return Char(chr(ord(c) - 32))
+        else:
+            return c
+    
+    # Test helper functions
+    print(is_letter(Char('a')))
+    print(is_letter(Char('Z')))
+    print(is_letter(Char('1')))
+    print(swap_case(Char('a')))
+    print(swap_case(Char('Z')))
+    print(swap_case(Char('#')))
+
+--- 12. Tool Result for mcp__qmcp__translate_and_run_qython (Event #11) at 14:41:23 ---
+TRANSLATION:
+is_upper:{[c]
+    :c within ("A";"Z")
+    };
+is_lower:{[c]
+    :c within ("a";"z")
+    };
+is_letter:{[c]
+    :is_upper[c] or is_lower[c]
+    };
+swap_case:{[c]
+    $[is_upper[c];
+        :.qython.Char[.qython.chr[.qython.ord[c]+32]];
+      is_lower[c];
+        :.qython.Char[.qython.chr[.qython.ord[c]-32]];
+        :c
+      ]
+    };
+/ Test helper functions
+.qython.print["is_letter[\"a\"]"];
+.qython.print["is_letter[\"Z\"]"];
+.qython.print["is_letter[\"1\"]"];
+.qython.print["swap_case[\"a\"]"];
+.qython.print["swap_case[\"Z\"]"];
+.qython.print["swap_case[\"#\"]"]
+
+EXECUTION RESULT:
+True 
+ True 
+ False 
+ 65 
+ 122 
+ Char('#') 
+
+None
+
+--- 13. Text Block (Message #1) at 14:41:25 ---
+Good! Now let me implement the full solution:
+
+--- 14. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 14:41:28 ---
+  qython_code:
+    def is_upper(c):
+        return c.within(Char('A'), Char('Z'))
+    
+    def is_lower(c):
+        return c.within(Char('a'), Char('z'))
+    
+    def is_letter(c):
+        return is_upper(c) or is_lower(c)
+    
+    def swap_case(c):
+        if is_upper(c):
+            return Char(chr(ord(c) + 32))
+        elif is_lower(c):
+            return Char(chr(ord(c) - 32))
+        else:
+            return c
+    
+    def solve(s):
+        # Check if string contains any letters
+        has_letters = np.any([is_letter(c) for c in s])
+        
+        if not has_letters:
+            # No letters - reverse the string
+            return reverse(s)
+        else:
+            # Has letters - swap case for letters, keep non-letters
+            result = [swap_case(c) for c in s]
+            return String("").join(result)
+    
+    # Test cases
+    print(String("Test 1:"), solve(String("1234")))
+    print(String("Test 2:"), solve(String("ab")))
+    print(String("Test 3:"), solve(String("#a@C")))
+
+--- 15. Tool Result for mcp__qmcp__translate_and_run_qython (Event #14) at 14:41:28 ---
+TRANSLATION:
+is_upper:{[c]
+    :c within ("A";"Z")
+    };
+is_lower:{[c]
+    :c within ("a";"z")
+    };
+is_letter:{[c]
+    :is_upper[c] or is_lower[c]
+    };
+swap_case:{[c]
+    $[is_upper[c];
+        :.qython.Char[.qython.chr[.qython.ord[c]+32]];
+      is_lower[c];
+        :.qython.Char[.qython.chr[.qython.ord[c]-32]];
+        :c
+      ]
+    };
+solve:{[s]
+    has_letters:any[{[is_letter;c] is_letter[c]}[is_letter] each s];
+    $[not has_letters;
+        :reverse[s];
+       [
+        result:{[swap_case;c] swap_case[c]}[swap_case] each s;
+        :.qython.join[""; result]
+       ]
+      ]
+    };
+/ Test cases
+.qython.print["\"Test 1:\"";"solve[\"1234\"]"];
+.qython.print["\"Test 2:\"";"solve[\"ab\"]"];
+.qython.print["\"Test 3:\"";"solve[\"#a@C\"]"]
+
+EXECUTION RESULT:
+Test 1: 4321 
+ Test 2: 6566 
+ Test 3: #65@99 
+
+None
+
+--- 16. Text Block (Message #1) at 14:41:32 ---
+I see the issue - the characters are being converted to ASCII values. Let me check what's happening:
+
+--- 17. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 14:41:34 ---
+  qython_code:
+    def swap_case_char(c):
+        if c.within(Char('A'), Char('Z')):
+            return Char(chr(ord(c) + 32))
+        elif c.within(Char('a'), Char('z')):
+            return Char(chr(ord(c) - 32))
+        else:
+            return c
+    
+    # Test
+    test_char = Char('a')
+    result = swap_case_char(test_char)
+    print(String("Type:"), type(result))
+    print(String("Result:"), result)
+    
+    # Test join
+    chars = [Char('A'), Char('B')]
+    joined = String("").join(chars)
+    print(String("Joined:"), joined)
+
+--- 18. Tool Result for mcp__qmcp__translate_and_run_qython (Event #17) at 14:41:34 ---
+TRANSLATION:
+swap_case_char:{[c]
+    $[c within ("A";"Z");
+        :.qython.Char[.qython.chr[.qython.ord[c]+32]];
+      c within ("a";"z");
+        :.qython.Char[.qython.chr[.qython.ord[c]-32]];
+        :c
+      ]
+    };
+/ Test
+test_char:"a";
+result:swap_case_char[test_char];
+.qython.print["\"Type:\"";".qython.type[result]"];
+.qython.print["\"Result:\"";"result"];
+/ Test join
+chars:("A";"B");
+joined:.qython.join[""; chars];
+.qython.print["\"Joined:\"";"joined"]
+
+EXECUTION RESULT:
+Type: "Char" 
+ Result: 65 
+ Joined: AB 
+
+None
+
+--- 19. Text Block (Message #1) at 14:41:38 ---
+The Char is showing as 65 when printed alone, but join works correctly. Let me verify the full solution works properly:
+
+--- 20. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 14:41:42 ---
+  qython_code:
+    def solve(s):
+        # Helper to check if char is uppercase letter
+        def is_upper(c):
+            return c.within(Char('A'), Char('Z'))
+        
+        # Helper to check if char is lowercase letter
+        def is_lower(c):
+            return c.within(Char('a'), Char('z'))
+        
+        # Helper to check if char is any letter
+        def is_letter(c):
+            return is_upper(c) or is_lower(c)
+        
+        # Helper to swap case of a character
+        def swap_case(c):
+            if is_upper(c):
+                return Char(chr(ord(c) + 32))
+            elif is_lower(c):
+                return Char(chr(ord(c) - 32))
+            else:
+                return c
+        
+        # Check if string contains any letters
+        has_letters = np.any([is_letter(c) for c in s])
+        
+        if not has_letters:
+            # No letters - reverse the string
+            return reverse(s)
+        else:
+            # Has letters - swap case for letters, keep non-letters
+            result = [swap_case(c) for c in s]
+            return String("").join(result)
+    
+    # Test cases from problem
+    test1 = solve(String("1234"))
+    test2 = solve(String("ab"))
+    test3 = solve(String("#a@C"))
+    
+    print(String("solve(String('1234')) ="), test1)
+    print(String("solve(String('ab')) ="), test2)
+    print(String("solve(String('#a@C')) ="), test3)
+    
+    # Verify expected results
+    print(String("Test 1 correct:"), test1 is String("4321"))
+    print(String("Test 2 correct:"), test2 is String("AB"))
+    print(String("Test 3 correct:"), test3 is String("#A@c"))
+
+--- 21. Tool Result for mcp__qmcp__translate_and_run_qython (Event #20) at 14:41:42 ---
+TRANSLATION:
+solve:{[s]
+    is_upper:{[c]
+        :c within ("A";"Z")
+        };
+    is_lower:{[c]
+        :c within ("a";"z")
+        };
+    is_letter:{[is_upper;is_lower;c]
+        :is_upper[c] or is_lower[c]
+        }[is_upper;is_lower];
+    swap_case:{[is_upper;is_lower;c]
+        $[is_upper[c];
+            :.qython.Char[.qython.chr[.qython.ord[c]+32]];
+          is_lower[c];
+            :.qython.Char[.qython.chr[.qython.ord[c]-32]];
+            :c
+          ]
+        }[is_upper;is_lower];
+    has_letters:any[{[is_letter;c] is_letter[c]}[is_letter] each s];
+    $[not has_letters;
+        :reverse[s];
+       [
+        result:{[swap_case;c] swap_case[c]}[swap_case] each s;
+        :.qython.join[""; result]
+       ]
+      ]
+    };
+/ Test cases from problem
+test1:solve["1234"];
+test2:solve["ab"];
+test3:solve["#a@C"];
+.qython.print["\"solve(String('1234')) =\"";"test1"];
+.qython.print["\"solve(String('ab')) =\"";"test2"];
+.qython.print["\"solve(String('#a@C')) =\"";"test3"];
+/ Verify expected results
+.qython.print["\"Test 1 correct:\"";"test1~\"4321\""];
+.qython.print["\"Test 2 correct:\"";"test2~\"AB\""];
+.qython.print["\"Test 3 correct:\"";"test3~\"#A@c\""]
+
+EXECUTION RESULT:
+solve(String('1234')) = 4321 
+ solve(String('ab')) = 6566 
+ solve(String('#a@C')) = #65@99 
+ Test 1 correct: True 
+ Test 2 correct: False 
+ Test 3 correct: False 
+
+None
+
+--- 22. Text Block (Message #1) at 14:41:47 ---
+I see the issue - when printing individual Chars they show as numbers, but the actual comparison shows test1 is correct. Let me investigate the swap_case issue more carefully:
+
+--- 23. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 14:41:50 ---
+  qython_code:
+    # Test chr and ord
+    c = Char('a')
+    print(String("ord('a'):"), ord(c))
+    print(String("chr(65):"), chr(65))
+    print(String("Char(chr(65)):"), Char(chr(65)))
+    
+    # Test uppercase conversion
+    upper_a = Char(chr(ord(Char('a')) - 32))
+    print(String("Upper A:"), upper_a)
+    
+    # Direct test
+    result = String("").join([Char('A'), Char('B')])
+    print(String("Join AB:"), result)
+
+--- 24. Tool Result for mcp__qmcp__translate_and_run_qython (Event #23) at 14:41:50 ---
+TRANSLATION:
+/ Test chr and ord
+c:"a";
+.qython.print["\"ord('a'):\"";".qython.ord[c]"];
+.qython.print["\"chr(65):\"";".qython.chr[65]"];
+.qython.print["\"Char(chr(65)):\"";".qython.Char[.qython.chr[65]]"];
+/ Test uppercase conversion
+upper_a:.qython.Char[.qython.chr[.qython.ord["a"]-32]];
+.qython.print["\"Upper A:\"";"upper_a"];
+/ Direct test
+result:.qython.join[""; ("A";"B")];
+.qython.print["\"Join AB:\"";"result"]
+
+EXECUTION RESULT:
+ord('a'): 97 
+ chr(65): 65 
+ Char(chr(65)): 65 
+ Upper A: 65 
+ Join AB: AB 
+
+None
+
+--- 25. Text Block (Message #1) at 14:41:54 ---
+I see - `chr()` returns an integer, not a character. Let me check if there's a proper way to convert:
+
+--- 26. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 14:41:57 ---
+  qython_code:
+    # Test different approaches
+    c = Char('a')
+    code = ord(c)
+    print(String("Code:"), code)
+    
+    # Try using string indexing to get character from ascii
+    ascii_chars = String(string.ascii_uppercase)
+    print(String("First char of uppercase:"), ascii_chars[0])
+    
+    # Actually, let me check if I can build directly
+    test = [Char('A'), Char('B'), Char('C')]
+    joined = String("").join(test)
+    print(String("Joined:"), joined)
+    
+    # What if I iterate over the string
+    letters = String("ABC")
+    for_each = [c for c in letters]
+    print(String("Length:"), len(for_each))
+    rejoined = String("").join(for_each)
+    print(String("Rejoined:"), rejoined)
+
+--- 27. Tool Result for mcp__qmcp__translate_and_run_qython (Event #26) at 14:41:57 ---
+TRANSLATION:
+/ Test different approaches
+c:"a";
+code:.qython.ord[c];
+.qython.print["\"Code:\"";"code"];
+/ Try using string indexing to get character from ascii
+ascii_chars:.qython.String[.Q.A];
+.qython.print["\"First char of uppercase:\"";"ascii_chars[0]"];
+/ Actually, let me check if I can build directly
+test:("A";"B";"C");
+joined:.qython.join[""; test];
+.qython.print["\"Joined:\"";"joined"];
+/ What if I iterate over the string
+letters:"ABC";
+for_each:{[c] c} each letters;
+.qython.print["\"Length:\"";"count[for_each]"];
+rejoined:.qython.join[""; for_each];
+.qython.print["\"Rejoined:\"";"rejoined"]
+
+EXECUTION RESULT:
+Code: 97 
+ First char of uppercase: A 
+ Joined: ABC 
+ Length: 3 
+ Rejoined: ABC 
+
+None
+
+--- 28. Text Block (Message #1) at 14:42:01 ---
+Good! So iterating over a String and joining works. Let me try a different approach - using the string constants to map characters:
+
+--- 29. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 14:42:02 ---
+  qython_code:
+    # Build uppercase and lowercase strings
+    lowercase = String(string.ascii_lowercase)
+    uppercase = String(string.ascii_uppercase)
+    
+    print(String("Lowercase:"), lowercase)
+    print(String("Uppercase:"), uppercase)
+    
+    # Test finding index
+    c = Char('a')
+    idx = lowercase.index(c)
+    print(String("Index of 'a':"), idx)
+    
+    # Get corresponding uppercase
+    upper_c = uppercase[idx]
+    print(String("Uppercase 'a':"), upper_c)
+
+--- 30. Tool Result for mcp__qmcp__translate_and_run_qython (Event #29) at 14:42:02 ---
+TRANSLATION:
+/ Build uppercase and lowercase strings
+lowercase:.qython.String[.Q.a];
+uppercase:.qython.String[.Q.A];
+.qython.print["\"Lowercase:\"";"lowercase"];
+.qython.print["\"Uppercase:\"";"uppercase"];
+/ Test finding index
+c:"a";
+idx:.qython.index[lowercase;c];
+.qython.print["\"Index of 'a':\"";"idx"];
+/ Get corresponding uppercase
+upper_c:uppercase[idx];
+.qython.print["\"Uppercase 'a':\"";"upper_c"]
+
+EXECUTION RESULT:
+Lowercase: List_Untyped([String("a"), String("b"), String("c"), String("d"), String("e"), String("f"), String("g"), String("h"), String("i"), String("j"), String("k"), String("l"), String("m"), String("n"), String("o"), String("p"), String("q"), String("r"), String("s"), String("t"), String("u"), String("v"), String("w"), String("x"), String("y"), String("z")]) 
+ Uppercase: List_Untyped([String("A"), String("B"), String("C"), String("D"), String("E"), String("F"), String("G"), String("H"), String("I"), String("J"), String("K"), String("L"), String("M"), String("N"), String("O"), String("P"), String("Q"), String("R"), String("S"), String("T"), String("U"), String("V"), String("W"), String("X"), String("Y"), String("Z")]) 
+ Index of 'a': 0 
+ Uppercase 'a': A 
+
+None
+
+--- 31. Text Block (Message #1) at 14:42:06 ---
+Great! Now I have a working approach. Let me rewrite the solution using string lookups:
+
+--- 32. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 14:42:12 ---
+  qython_code:
+    def solve(s):
+        lowercase = String(string.ascii_lowercase)
+        uppercase = String(string.ascii_uppercase)
+        
+        # Helper to check if char is letter
+        def is_letter(c):
+            # Try to find in lowercase or uppercase
+            try:
+                lowercase.index(c)
+                return True
+            except:
+                try:
+                    uppercase.index(c)
+                    return True
+                except:
+                    return False
+        
+        # Helper to swap case
+        def swap_case(c):
+            try:
+                idx = lowercase.index(c)
+                return uppercase[idx]
+            except:
+                try:
+                    idx = uppercase.index(c)
+                    return lowercase[idx]
+                except:
+                    return c
+        
+        # Check if string contains any letters
+        has_letters = np.any([is_letter(c) for c in s])
+        
+        if not has_letters:
+            # No letters - reverse the string
+            return reverse(s)
+        else:
+            # Has letters - swap case for letters, keep non-letters
+            result = [swap_case(c) for c in s]
+            return String("").join(result)
+    
+    # Test cases
+    test1 = solve(String("1234"))
+    test2 = solve(String("ab"))
+    test3 = solve(String("#a@C"))
+    
+    print(String("Test 1:"), test1, String("Expected: 4321"))
+    print(String("Test 2:"), test2, String("Expected: AB"))
+    print(String("Test 3:"), test3, String("Expected: #A@c"))
+
+--- 33. Tool Result for mcp__qmcp__translate_and_run_qython (Event #32) at 14:42:12 ---
+Failed to translate Qython code: Invalid syntax near 'try' - check for mismatched brackets or operators
+
+--- 34. Text Block (Message #1) at 14:42:13 ---
+Try/except is not supported in Qython. Let me use the `.within()` method for checking:
+
+--- 35. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 14:42:18 ---
+  qython_code:
+    def solve(s):
+        lowercase = String(string.ascii_lowercase)
+        uppercase = String(string.ascii_uppercase)
+        
+        # Helper to swap case
+        def swap_case(c):
+            if c.within(Char('a'), Char('z')):
+                # Lowercase letter - find index and return uppercase
+                idx = lowercase.index(c)
+                return uppercase[idx]
+            elif c.within(Char('A'), Char('Z')):
+                # Uppercase letter - find index and return lowercase
+                idx = uppercase.index(c)
+                return lowercase[idx]
+            else:
+                # Not a letter
+                return c
+        
+        # Check if string contains any letters
+        has_letters = np.any([c.within(Char('A'), Char('Z')) or c.within(Char('a'), Char('z')) for c in s])
+        
+        if not has_letters:
+            # No letters - reverse the string
+            return reverse(s)
+        else:
+            # Has letters - swap case for letters, keep non-letters
+            result = [swap_case(c) for c in s]
+            return String("").join(result)
+    
+    # Test cases
+    test1 = solve(String("1234"))
+    test2 = solve(String("ab"))
+    test3 = solve(String("#a@C"))
+    
+    print(String("Test 1:"), test1, String("| Expected: 4321"))
+    print(String("Test 2:"), test2, String("| Expected: AB"))
+    print(String("Test 3:"), test3, String("| Expected: #A@c"))
+    
+    # Verify
+    print(String("Test 1 correct:"), test1 is String("4321"))
+    print(String("Test 2 correct:"), test2 is String("AB"))
+    print(String("Test 3 correct:"), test3 is String("#A@c"))
+
+--- 36. Tool Result for mcp__qmcp__translate_and_run_qython (Event #35) at 14:42:18 ---
+TRANSLATION:
+solve:{[s]
+    lowercase:.qython.String[.Q.a];
+    uppercase:.qython.String[.Q.A];
+    swap_case:{[lowercase;uppercase;c]
+        $[c within ("a";"z");
+           [
+            idx:.qython.index[lowercase;c];
+            :uppercase[idx]
+           ];
+          c within ("A";"Z");
+           [
+            idx:.qython.index[uppercase;c];
+            :lowercase[idx]
+           ];
+            :c
+          ]
+        }[lowercase;uppercase];
+    has_letters:any[{[c] (c within ("A";"Z")) or (c within ("a";"z"))} each s];
+    $[not has_letters;
+        :reverse[s];
+       [
+        result:{[swap_case;c] swap_case[c]}[swap_case] each s;
+        :.qython.join[""; result]
+       ]
+      ]
+    };
+/ Test cases
+test1:solve["1234"];
+test2:solve["ab"];
+test3:solve["#a@C"];
+.qython.print["\"Test 1:\"";"test1";"\"| Expected: 4321\""];
+.qython.print["\"Test 2:\"";"test2";"\"| Expected: AB\""];
+.qython.print["\"Test 3:\"";"test3";"\"| Expected: #A@c\""];
+/ Verify
+.qython.print["\"Test 1 correct:\"";"test1~\"4321\""];
+.qython.print["\"Test 2 correct:\"";"test2~\"AB\""];
+.qython.print["\"Test 3 correct:\"";"test3~\"#A@c\""]
+
+EXECUTION RESULT:
+Test 1: 4321 | Expected: 4321 
+ Test 2: AB | Expected: AB 
+ Test 3: #A@c | Expected: #A@c 
+ Test 1 correct: True 
+ Test 2 correct: True 
+ Test 3 correct: True 
+
+None
+
+--- 37. Text Block (Message #1) at 14:42:21 ---
+Perfect! All tests pass. Let me test a few more edge cases:
+
+--- 38. Tool Call: mcp__qmcp__translate_and_run_qython (Message #1) at 14:42:23 ---
+  qython_code:
+    # Additional test cases
+    test4 = solve(String(""))  # Empty string
+    test5 = solve(String("ABC"))  # All uppercase
+    test6 = solve(String("xyz"))  # All lowercase
+    test7 = solve(String("###"))  # Only special chars
+    test8 = solve(String("123abc456XYZ"))  # Mixed
+    
+    print(String("Empty:"), test4)
+    print(String("ABC:"), test5)
+    print(String("xyz:"), test6)
+    print(String("###:"), test7)
+    print(String("Mixed:"), test8)
+
+--- 39. Tool Result for mcp__qmcp__translate_and_run_qython (Event #38) at 14:42:23 ---
+TRANSLATION:
+/ Additional test cases
+test4:solve[""] ; / Empty string
+test5:solve["ABC"] ; / All uppercase
+test6:solve["xyz"] ; / All lowercase
+test7:solve["###"] ; / Only special chars
+test8:solve["123abc456XYZ"] ; / Mixed
+.qython.print["\"Empty:\"";"test4"];
+.qython.print["\"ABC:\"";"test5"];
+.qython.print["\"xyz:\"";"test6"];
+.qython.print["\"###:\"";"test7"];
+.qython.print["\"Mixed:\"";"test8"]
+
+EXECUTION RESULT:
+Empty:  
+ ABC: abc 
+ xyz: XYZ 
+ ###: ### 
+ Mixed: 123ABC456xyz 
+
+None
+
+--- 40. Text Block (Message #1) at 14:42:29 ---
+Excellent! All test cases work correctly. Now let me write the final solution to a file:
+
+--- 41. Tool Call: Write (Message #1) at 14:42:35 ---
+  file_path:
+    /mnt/d/python/qhumaneval/problem_161_qython_session_cec7f6c9/problem_solution_161.qy
+  content:
+    def solve(s):
+        lowercase = String(string.ascii_lowercase)
+        uppercase = String(string.ascii_uppercase)
+    
+        # Helper to swap case
+        def swap_case(c):
+            if c.within(Char('a'), Char('z')):
+                # Lowercase letter - find index and return uppercase
+                idx = lowercase.index(c)
+                return uppercase[idx]
+            elif c.within(Char('A'), Char('Z')):
+                # Uppercase letter - find index and return lowercase
+                idx = uppercase.index(c)
+                return lowercase[idx]
+            else:
+                # Not a letter
+                return c
+    
+        # Check if string contains any letters
+        has_letters = np.any([c.within(Char('A'), Char('Z')) or c.within(Char('a'), Char('z')) for c in s])
+    
+        if not has_letters:
+            # No letters - reverse the string
+            return reverse(s)
+        else:
+            # Has letters - swap case for letters, keep non-letters
+            result = [swap_case(c) for c in s]
+            return String("").join(result)
+    
+
+--- 42. Text Block (Message #1) at 14:42:40 ---
+Done! The solution has been written to `problem_solution_161.qy`. 
+
+The implementation:
+1. Uses `string.ascii_lowercase` and `string.ascii_uppercase` to create lookup strings
+2. Checks if each character is a letter using `.within()` method with character ranges
+3. Swaps case by finding the index in one string and returning the character at the same index in the other
+4. If no letters exist in the string, reverses the entire string using `reverse()`
+5. Otherwise, builds the result by swapping case for letters and keeping non-letters unchanged

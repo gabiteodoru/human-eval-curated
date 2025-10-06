@@ -46,10 +46,12 @@ humaneval-curated/
 │   │   ├── problem_000.qy
 │   │   ├── problem_000.q
 │   │   └── ...
-│   └── q/                        # 22 pure q solutions
+│   └── q/                        # 162 native q solutions
 │       ├── problem_000.q
 │       └── ...
-├── transcripts/                  # (Coming soon: solution transcripts)
+├── transcripts/                  # Complete conversation transcripts
+│   ├── q/                        # 164 native q transcripts
+│   └── qython/                   # 164 Qython transcripts
 ├── CURATION_NOTES.md             # Documentation of curation changes
 └── LICENSE                       # MIT License
 ```
@@ -147,35 +149,77 @@ For transparency, this README documents the current approach: tests were adjuste
 
 (Coming soon: Python harness for automated test execution)
 
+## Benchmark Methodology
+
+### Environment and Versions
+
+All solutions were generated during October 2025 using:
+- **Claude Model:** Sonnet 4.5 (claude-sonnet-4-5-20250929)
+- **q/kdb+ Version:** Latest version as of October 2025
+- **qmcp:** Custom MCP server for q/kdb+ integration
+- **Timeout:** 5 minutes per problem (300 seconds)
+
+### Benchmark Execution
+
+**Session timeout:** Each problem was given a 5-minute limit. If Claude did not write a solution file within this time, the session was terminated.
+
+**Qython mode:** 164/164 sessions completed successfully (all produced solution files)
+
+**Native q mode:** 162/164 sessions completed successfully
+- For 2 problems, Claude worked on the solution but did not write a solution file:
+  - Problem 132: Hit 5-minute timeout (transcript shows ~5 minutes of work)
+  - Problem 10: Session ended early (transcript shows ~2.5 minutes, likely Claude freeze rather than timeout)
+
+Incomplete sessions were not retried to maintain statistical validity. Since native q mode generates significantly more tool calls per problem, it may have higher probability of encountering Claude freezes or other session issues.
+
+**Overall Results:**
+- **Qython mode:** 163/164 correct (0.61% failure rate, 99.39% pass rate)
+- **Native q mode:** 153/164 correct (6.71% failure rate, 93.29% pass rate)
+  - Includes 9 solutions that were produced but failed tests
+  - Includes 2 sessions that did not produce solution files
+
+**qmcp bug fixes:** During benchmark execution, translation bugs in qmcp were discovered and fixed. Any session that encountered a qmcp bug was restarted with the fixed version to ensure fair evaluation.
+
+**Manual intervention:** No manual code fixes were applied to solutions. All code was generated entirely by Claude. The only interventions were:
+- Restarting sessions that hit qmcp bugs
+- Implementing qmcp bug fixes between sessions
+
+### Reproducibility
+
+This repository includes everything needed to verify and reproduce the results:
+- **All solution files:** 164 Qython solutions, 162 native q solutions
+- **Test harness:** `run_all_tests.py` for automated verification
+- **Prompt generation:** `get_prompts_q_qython.py` shows exact prompts used
+- **Test corpus:** `corpus_q.md` and `corpus_qython.md` with all test cases
+- **Complete transcripts:** All 328 conversation logs (164 problems × 2 modes) in `transcripts/q/` and `transcripts/qython/`
+
+Note: Transcripts are in Claude-specific format and may not be relevant for evaluating other LLMs or future Claude versions with different conversation formats.
+
 ## Solution Transcripts
 
-(Coming soon: Complete development transcripts showing Claude solving all 164 HumanEval problems)
+This repository includes **complete development transcripts** for all 328 sessions (164 problems × 2 modes) showing Claude solving HumanEval problems using qmcp tooling.
 
-This repository will include **complete development transcripts** showing Claude solving all HumanEval problems using qmcp tooling:
-
-- **Qython approach** (162/164 solved, 99.3% success rate)
-- **Pure q approach** (16/23 solved, 69.6% success rate on tested subset)
-
-Each transcript will capture the full iterative process:
+Each transcript captures the full iterative process:
 - Problem interpretation
 - Code attempts and errors
 - Debugging with real-time feedback
 - Refinements based on test results
 - Final working solution
 
-### Key Findings from Transcripts
+### Key Findings from Pilot Study
+
+Results from a preliminary pilot study on a subset of problems (see [pilot blog post](https://medium.com/@gabiteodoru/getting-llms-to-100-success-on-q-kdb-humaneval-and-why-it-should-be-the-baseline-preliminary-9aa406645139)):
 
 **Average iterations to solution:**
 - Qython: 4.0 tool calls
 - Pure q: 20.8 tool calls (5.2x difference)
 
 **Token efficiency:**
-- Qython: 44,170 tokens/problem average
-- Pure q: 56,327 tokens/problem average
+- Qython required 2.7x fewer non-cached tokens (221 vs 603 tokens/problem), representing actual computational work rather than reused context
 
-Failed attempts will be included for transparency and research value.
+Failed attempts are included for transparency and research value.
 
-See [full benchmark analysis](link-to-your-article) for methodology and statistical significance testing.
+Full benchmark analysis for the complete 164-problem corpus will be published separately.
 
 ## Curation Examples
 
