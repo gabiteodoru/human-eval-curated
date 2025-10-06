@@ -206,6 +206,41 @@ Each transcript captures the full iterative process:
 - Refinements based on test results
 - Final working solution
 
+### Complete Corpus Analysis (All 164 Problems)
+
+**Statistical Visualizations**
+
+The repository includes histogram visualizations comparing Qython vs Q mode performance across all 164 problems:
+- `benchmark_histograms.png` - Combined view of token usage and tool calls
+- `histogram_tokens.png` - Non-cached token usage distribution
+- `histogram_tool_calls.png` - Core tool usage distribution
+
+**Non-cached Token Usage:**
+- Qython: mean=164, median=98, std=167
+- Q: mean=383, median=314, std=272
+- **Q uses 2.33x more tokens on average**
+
+**Core Tool Calls:**
+- Qython: mean=2.7, median=2, std=2.7
+- Q: mean=13.1, median=11, std=8.3
+- **Q uses 4.79x more tool calls on average**
+
+**Statistical Significance:**
+
+Paired binomial test on success/failure outcomes (p = 0.002):
+- Both modes succeeded: 153 problems
+- Only Qython succeeded: 10 problems
+- Only Q succeeded: 0 problems
+- Both modes failed: 1 problem (problem 32)
+
+Qython's 99.4% success rate vs Q's 93.3% is statistically significant (p < 0.01).
+
+**Data Export:**
+
+Complete benchmark data available in `benchmark_data.csv` (328 rows, one per problem-mode pair) with columns:
+- `problem_id`, `mode`, `solution_file_written`, `solution_successful`
+- `tokens_usage`, `cached_token_usage`, `non_cached_token_usage`, `core_tool_calls`
+
 ### Key Findings from Pilot Study
 
 Results from a preliminary pilot study on a subset of problems (see [pilot blog post](https://medium.com/@gabiteodoru/getting-llms-to-100-success-on-q-kdb-humaneval-and-why-it-should-be-the-baseline-preliminary-9aa406645139)):
