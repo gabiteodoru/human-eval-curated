@@ -39,7 +39,7 @@ env/
 htmlcov/
 
 # Development scripts
-copy_solutions.sh
+copy_solutions.py
 
 # Temporary files
 *.tmp

@@ -141,5 +141,14 @@
 .qython.index:{[arr;val] $[count[arr]=idx:arr?val; '"ValueError: value not in list"; idx]};
 .qython.filter:{[func;arr] arr where func each arr};
 .qython.setxor1d:{(x union y) except x inter y};
-
-
+.qython.rstreq:{
+    (tx;ty):type each (x;y); 
+    if[(tx=99)&(ty=99);(x;y): {asc[key[x]]#x}each(x;y); :.qython.rstreq[key x;key y]&.qython.rstreq[value x;value y]];
+    if[abs[tx] = 11; tx: type x: string x]; if[abs[ty] = 11; ty: type y: string y];
+    $[  (tx within 0 99)&(ty within 0 99); all .qython.rstreq'[x;y];
+        (tx = 10)&(ty = -10); (count[x]=1)&(x[0]=y);
+        (tx = -10)&(ty = 10); (count[y]=1)&(x=[0]y);
+        (not tx within 0 99) & (not ty within 0 99) & null[x] & null[y]; 1b;
+        all .[(=);(x;y);0b]
+        ]
+    };

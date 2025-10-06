@@ -8,10 +8,10 @@ collatz: {[n]
     seq,: n
   ];
   seq
-};
+ };
 
 / Main function: return sorted list of odd numbers in Collatz sequence
 get_odd_collatz: {[n]
   seq: collatz[n];
   asc distinct seq where seq mod 2
-};
+ };

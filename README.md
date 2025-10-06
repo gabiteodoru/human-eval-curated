@@ -106,6 +106,43 @@ It includes:
 
 Note: `.qython.print` functionality requires the full qmcp package (not included in this repository). Tests will work without it.
 
+## Important Notes on Testing Methodology
+
+### Test Translation and Type Flexibility
+
+The q tests in `corpus_q.md` were initially auto-translated from the Qython tests in `corpus_qython.md`. However, there's an important mismatch:
+
+**Qython solutions:** Claude was explicitly prompted to use Strings (q character lists) for text, matching Python's string type semantics. Therefore, Qython tests were written expecting Strings.
+
+**Native q solutions:** Claude received only the original Python problem statement (which just says "str"), without specific guidance on String vs Symbol representation. Claude was free to choose either, and both are valid q implementations.
+
+**The problem:** Auto-translated tests from `corpus_qython.md` inherited the String-type expectations, but native q solutions weren't constrained to use Strings.
+
+### Manual Test Adjustments
+
+To accommodate valid Symbol usage in native q mode, **some tests in `corpus_q.md` were manually updated** to be less strict about type requirements. Specifically:
+
+- Manual updates were made **only for tests that failed due to type strictness** during the benchmark run
+- Not all potentially strict tests were updated—only those that actually caused failures in practice
+
+### Implications for Reproducibility
+
+This selective manual curation has several implications:
+
+1. **Auto-translation differences:** If using qmcp Enterprise's Qython translation layer to generate fresh tests, they may differ from `corpus_q.md` since the manual adjustments won't be present.
+
+2. **Implementation-dependent fairness:** Tests may unfairly penalize LLMs that make different type choices (String vs Symbol) than those encountered during this specific benchmark run.
+
+3. **Incomplete coverage:** The manual updates only addressed failures encountered in one particular benchmark run. Other valid q implementations might still be unfairly penalized by overly strict type requirements that weren't encountered and thus weren't fixed.
+
+### Why Not Update All Tests?
+
+The Qython-to-q translation layer doesn't currently support the operations needed for comprehensive type flexibility (e.g., try-except blocks for type checking). A complete solution would require either:
+- Extensive manual review of all 164 test cases, or
+- Enhanced translation capabilities in qmcp
+
+For transparency, this README documents the current approach: tests were adjusted pragmatically to support the specific solutions generated in this benchmark run, not exhaustively to support all possible valid implementations.
+
 ### For Automated Testing
 
 (Coming soon: Python harness for automated test execution)

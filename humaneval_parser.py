@@ -207,6 +207,100 @@ def remove_type_hints(code):
     return code
 
 
+def process_quotes_in_line(line):
+    """Process quoted strings in a line, wrapping them with String() or Char(), but skip triple quotes.
+
+    Lines with #single-char comment will wrap length-1 strings with Char() instead of String().
+    """
+    # Check if this line has the #single-char marker
+    use_char_for_single = '#single-char' in line
+
+    result = ""
+    i = 0
+    while i < len(line):
+        if line[i] in ["'", '"']:
+            # Check if this is part of triple quotes
+            if i + 2 < len(line) and line[i:i+3] in ['"""', "'''"]:
+                # This is triple quotes - skip them entirely
+                result += line[i:i+3]
+                i += 3
+                continue
+
+            # Found a single quote
+            quote_char = line[i]
+            quote_start = i
+            i += 1
+            # Find the matching quote
+            while i < len(line) and line[i] != quote_char:
+                i += 1
+
+            if i < len(line):  # Found matching quote
+                quote_end = i
+                quoted_content = line[quote_start:quote_end+1]
+                # Extract the content without quotes to check length
+                content_only = quoted_content[1:-1]
+                # Use Char() for single characters if marker present, otherwise String()
+                if len(content_only) == 1 and use_char_for_single:
+                    result += f"Char({quoted_content})"
+                else:
+                    result += f"String({quoted_content})"
+                i += 1
+            else:
+                # Unmatched quote, just add it
+                result += quote_char
+        else:
+            result += line[i]
+            i += 1
+
+    return result
+
+def wrap_quoted_strings_in_docstring(code):
+    """Wrap quoted strings in docstring with String() constructor using Python string parsing."""
+    lines = code.split('\n')
+    result_lines = []
+
+    # Process each line
+    in_docstring = False
+    docstring_quote_type = None
+
+    for line in lines:
+        if in_docstring:
+            # Check if this line ends the docstring
+            if docstring_quote_type in line:
+                # Process quoted strings in this line, then end docstring
+                processed_line = process_quotes_in_line(line)
+                result_lines.append(processed_line)
+                in_docstring = False
+            else:
+                # Process quoted strings in this line
+                processed_line = process_quotes_in_line(line)
+                result_lines.append(processed_line)
+        else:
+            # Check if this line starts a docstring
+            stripped = line.strip()
+            if ('"""' in stripped or "'''" in stripped) and not stripped.startswith('#'):
+                # This might be the start of a docstring
+                if '"""' in stripped:
+                    docstring_quote_type = '"""'
+                else:
+                    docstring_quote_type = "'''"
+
+                # Check if it's a single-line docstring or multi-line
+                quote_count = stripped.count(docstring_quote_type)
+                if quote_count >= 2:
+                    # Single-line docstring
+                    processed_line = process_quotes_in_line(line)
+                    result_lines.append(processed_line)
+                else:
+                    # Multi-line docstring starts
+                    in_docstring = True
+                    processed_line = process_quotes_in_line(line)
+                    result_lines.append(processed_line)
+            else:
+                result_lines.append(line)
+
+    return '\n'.join(result_lines)
+
 def wrap_quoted_strings_in_code(code):
     """
     Wrap all quoted strings in code with String() or Char() constructor.

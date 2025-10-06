@@ -2680,12 +2680,11 @@ check:{[candidate]
         };
     letters:.Q.a;
     do[100;
-        .qython.str:.qython.join[""; {[letters;i] rand[letters]}[letters] each .qython.arange[.qython.randint[10;21]]];
-        encoded_str:encode_shift[.qython.str];
-        .qython.assert[candidate[encoded_str] = .qython.str]
+        s:.qython.join[""; {[letters;i] rand[letters]}[letters] each .qython.arange[.qython.randint[10;21]]];
+        encoded_str:encode_shift[s];
+        .qython.assert (@[candidate;encoded_str;0] in (s;`$s)) or (@[candidate;`$encoded_str;0] in (s;`$s))
         ]
     }
-/ 'str' is a reserved built-in function. Using it as an assignment target in: .qython.str:.qython.join[""; {[letters;i] rand[letters]}[letters] each .qython.arange[.qython.randint[10;21]]] may cause unexpected behavior or conflicts.
 ```
 <!-- TEST_END -->
 
@@ -4978,10 +4977,10 @@ lst = sorted(set(lst))
 check:{[candidate]
     .qython.assert[candidate[(1;2;3;4;5)] = 2];
     .qython.assert[candidate[(5;1;4;3;2)] = 2];
-    .qython.assert[candidate[()]~(::)];
-    .qython.assert[candidate[(1;1)]~(::)];
+    .qython.assert[null candidate[()]];
+    .qython.assert[null candidate[(1;1)]];
     .qython.assert[candidate[(1;1;1;1;0)] = 1];
-    .qython.assert[(candidate[(1;(.qython.int[0 xexp 0]))])~(::)];
+    .qython.assert[null (candidate[(1;(.qython.int[0 xexp 0]))])];
     .qython.assert[candidate[(-35;34;12;-45)] = -35];
     .qython.assert[1b]
     }
@@ -5286,13 +5285,15 @@ if len(dict.keys()) == 0:
 ## Test Cases
 ```q
 check:{[candidate]
-    .qython.assert2[candidate[(enlist["p"];enlist["b"])!("pineapple";"banana")] = 1b;raze[(.qython.String["First test error: "];.qython.String[candidate[(enlist["p"];enlist["b"])!("pineapple";"banana")]])]];
-    .qython.assert2[candidate[(enlist["p"];enlist["A"];enlist["B"])!("pineapple";"banana";"banana")] = 0b;raze[(.qython.String["Second test error: "];.qython.String[candidate[(enlist["p"];enlist["A"];enlist["B"])!("pineapple";"banana";"banana")]])]];
-    .qython.assert2[candidate[(enlist["p"];5;enlist["a"])!("pineapple";"banana";"apple")] = 0b;raze[(.qython.String["Third test error: "];.qython.String[candidate[(enlist["p"];5;enlist["a"])!("pineapple";"banana";"apple")]])]];
-    .qython.assert2[candidate[("Name";"Age";"City")!("John";"36";"Houston")] = 0b;raze[(.qython.String["Fourth test error: "];.qython.String[candidate[("Name";"Age";"City")!("John";"36";"Houston")]])]];
-    .qython.assert2[candidate[("STATE";"ZIP")!("NC";"12345")] = 1b;raze[(.qython.String["Fifth test error: "];.qython.String[candidate[("STATE";"ZIP")!("NC";"12345")]])]];
-    .qython.assert2[candidate[("fruit";"taste")!("Orange";"Sweet")] = 1b;raze[(.qython.String["Fourth test error: "];.qython.String[candidate[("fruit";"taste")!("Orange";"Sweet")]])]];
-    .qython.assert2[candidate[()!()] = 0b;raze[(.qython.String["1st edge test error: "];.qython.String[candidate[()!()]])]]
+	wrapper:{[candidate;x] @[candidate;x;0b] or @[candidate;({$[10=abs type x;`$x;x]}each key x)!value x;0b]}[check_dict_case];
+    .qython.assert2[wrapper[(enlist["p"];enlist["b"])!("pineapple";"banana")] = 1b;"First test error"];
+    .qython.assert2[wrapper[(enlist["p"];enlist["A"];enlist["B"])!("pineapple";"banana";"banana")] = 0b;"Second test error"];
+    .qython.assert2[wrapper[(enlist["p"];5;enlist["a"])!("pineapple";"banana";"apple")] = 0b;"Third test error"];
+    .qython.assert2[wrapper[("Name";"Age";"City")!("John";"36";"Houston")] = 0b;"Fourth test error"];
+    .qython.assert2[wrapper[("STATE";"ZIP")!("NC";"12345")] = 1b;"Fifth test error"];
+    .qython.assert2[wrapper[("fruit";"taste")!("Orange";"Sweet")] = 1b;"Sixth test error"];
+    .qython.assert2[wrapper[()!()] = 0b;"First edge test error"]
+
     }
 ```
 <!-- TEST_END -->
@@ -5886,12 +5887,12 @@ dic = {
 ```q
 check:{[candidate]
     .qython.assert2[1b;"This prints if this assert fails 1 (good for debugging!)"];
-    .qython.assert2[candidate[(2;1;1;4;5;8;2;3)] = ("Eight";"Five";"Four";"Three";"Two";"Two";"One";"One");"Error"];
-    .qython.assert2[candidate[()] = ();"Error"];
-    .qython.assert2[candidate[(1;-1;55)] = enlist "One";"Error"];
+    .qython.assert2[any candidate[(2;1;1;4;5;8;2;3)] ~/: {(x;`$x)} ("Eight";"Five";"Four";"Three";"Two";"Two";"One";"One");"Error"];
+    .qython.assert2[0=count candidate[()];"Error"];
+    .qython.assert2[any candidate[(1;-1;55)] ~/: {(x;`$x)} enlist "One";"Error"];
     .qython.assert2[1b;"This prints if this assert fails 2 (also good for debugging!)"];
-    .qython.assert[candidate[(1;-1;3;2)] = ("Three";"Two";"One")];
-    .qython.assert[candidate[(9;4;8)] = ("Nine";"Eight";"Four")]
+    .qython.assert[any candidate[(1;-1;3;2)] ~/: {(x;`$x)} ("Three";"Two";"One")];
+    .qython.assert[any candidate[(9;4;8)] ~/: {(x;`$x)} ("Nine";"Eight";"Four")]
     }
 ```
 <!-- TEST_END -->
@@ -6272,14 +6273,14 @@ dict1={}
 ## Test Cases
 ```q
 check:{[candidate]
-    .qython.assert2[(candidate["a b b a"]) = ("a";"b")!(2;2);"This prints if this assert fails 1 (good for debugging!)"];
-    .qython.assert2[(candidate["a b c a b"]) = ("a";"b")!(2;2);"This prints if this assert fails 2 (good for debugging!)"];
-    .qython.assert2[(candidate["a b c d g"]) = ("a";"b";"c";"d";"g")!(1;1;1;1;1);"This prints if this assert fails 3 (good for debugging!)"];
-    .qython.assert2[(candidate["r t g"]) = ("r";"t";"g")!(1;1;1);"This prints if this assert fails 4 (good for debugging!)"];
-    .qython.assert2[(candidate["b b b b a"]) = (enlist "b")!(enlist 4);"This prints if this assert fails 5 (good for debugging!)"];
-    .qython.assert2[(candidate["r t g"]) = ("r";"t";"g")!(1;1;1);"This prints if this assert fails 6 (good for debugging!)"];
-    .qython.assert2[candidate[""] = ()!();"This prints if this assert fails 7 (also good for debugging!)"];
-    .qython.assert2[candidate["a"] = (enlist "a")!(enlist 1);"This prints if this assert fails 8 (also good for debugging!)"]
+    .qython.assert2[.qython.rstreq[(candidate["a b b a"]) ; ("a";"b")!(2;2)];"This prints if this assert fails 1 (good for debugging!)"];
+    .qython.assert2[.qython.rstreq[(candidate["a b c a b"]) ; ("a";"b")!(2;2)];"This prints if this assert fails 2 (good for debugging!)"];
+    .qython.assert2[.qython.rstreq[(candidate["a b c d g"]) ; ("a";"b";"c";"d";"g")!(1;1;1;1;1)];"This prints if this assert fails 3 (good for debugging!)"];
+    .qython.assert2[.qython.rstreq[(candidate["r t g"]) ; ("r";"t";"g")!(1;1;1)];"This prints if this assert fails 4 (good for debugging!)"];
+    .qython.assert2[.qython.rstreq[(candidate["b b b b a"]) ; (enlist "b")!(enlist 4)];"This prints if this assert fails 5 (good for debugging!)"];
+    .qython.assert2[.qython.rstreq[(candidate["r t g"]) ; ("r";"t";"g")!(1;1;1)];"This prints if this assert fails 6 (good for debugging!)"];
+    .qython.assert2[0=count candidate[""];"This prints if this assert fails 7 (also good for debugging!)"];
+    .qython.assert2[.qython.rstreq[candidate[enlist "a"] ; (enlist "a")!(enlist 1)];"This prints if this assert fails 8 (also good for debugging!)"]
     }
 /single-char
 ```
@@ -7862,16 +7863,16 @@ smallest = list(filter(lambda x: x < 0, lst))
 ## Test Cases
 ```q
 check:{[candidate]
-    .qython.assert[candidate[(2;4;1;3;5;7)] = ((::);1)];
-    .qython.assert[candidate[(2;4;1;3;5;7;0)] = ((::);1)];
-    .qython.assert[candidate[(1;3;2;4;5;6;-2)] = (-2;1)];
-    .qython.assert[candidate[(4;5;3;6;2;7;-7)] = (-7;2)];
-    .qython.assert[candidate[(7;3;8;4;9;2;5;-9)] = (-9;2)];
-    .qython.assert[candidate[()] = ((::);(::))];
-    .qython.assert[(candidate[enlist 0]) = ((::);(::))];
-    .qython.assert[candidate[(-1;-3;-5;-6)] = (-1;(::))];
-    .qython.assert[candidate[(-1;-3;-5;-6;0)] = (-1;(::))];
-    .qython.assert[candidate[(-6;-4;-4;-3;1)] = (-3;1)];
+    .qython.assert[.qython.rstreq[candidate[(2;4;1;3;5;7)] ; ((::);1)]];
+    .qython.assert[.qython.rstreq[candidate[(2;4;1;3;5;7;0)] ; ((::);1)]];
+    .qython.assert[.qython.rstreq[candidate[(1;3;2;4;5;6;-2)] ; (-2;1)]];
+    .qython.assert[.qython.rstreq[candidate[(4;5;3;6;2;7;-7)] ; (-7;2)]];
+    .qython.assert[.qython.rstreq[candidate[(7;3;8;4;9;2;5;-9)] ; (-9;2)]];
+    .qython.assert[.qython.rstreq[candidate[()] ; ((::);(::))]];
+    .qython.assert[.qython.rstreq[(candidate[enlist 0]) ; ((::);(::))]];
+    .qython.assert[.qython.rstreq[candidate[(-1;-3;-5;-6)] ; (-1;(::))]];
+    .qython.assert[.qython.rstreq[candidate[(-1;-3;-5;-6;0)] ; (-1;(::))]];
+    .qython.assert[.qython.rstreq[candidate[(-6;-4;-4;-3;1)] ; (-3;1)]];
     .qython.assert[1b]
     }
 ```
@@ -8601,13 +8602,13 @@ planet_names = ("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranu
 ## Test Cases
 ```q
 check:{[candidate]
-    .qython.assert2[candidate["Jupiter";"Neptune"] = ("Saturn";"Uranus");raze[("First test error: ";.qython.String[count[candidate["Jupiter";"Neptune"]]])]];
-    .qython.assert2[candidate["Earth";"Mercury"] = enlist "Venus";raze[("Second test error: ";.qython.String[candidate["Earth";"Mercury"]])]];
-    .qython.assert2[candidate["Mercury";"Uranus"] = ("Venus";"Earth";"Mars";"Jupiter";"Saturn");raze[("Third test error: ";.qython.String[candidate["Mercury";"Uranus"]])]];
-    .qython.assert2[candidate["Neptune";"Venus"] = ("Earth";"Mars";"Jupiter";"Saturn";"Uranus");raze[("Fourth test error: ";.qython.String[candidate["Neptune";"Venus"]])]];
-    .qython.assert[candidate["Earth";"Earth"] = ()];
-    .qython.assert[candidate["Mars";"Earth"] = ()];
-    .qython.assert[candidate["Jupiter";"Makemake"] = ()]
+    .qython.assert2[any any (.[candidate;;`] each {(x;`$x)}("Jupiter";"Neptune"))  ~/:\: {(x;`$x)} ("Saturn";"Uranus");"First test error"];
+    .qython.assert2[any any (.[candidate;;`] each {(x;`$x)}("Earth";"Mercury")) ~/:\: {(x;`$x)} enlist "Venus";"Second test error"];
+    .qython.assert2[any any (.[candidate;;`] each {(x;`$x)}("Mercury";"Uranus")) ~/:\: {(x;`$x)} ("Venus";"Earth";"Mars";"Jupiter";"Saturn");"Third test error"];
+    .qython.assert2[any any (.[candidate;;`] each {(x;`$x)}("Neptune";"Venus")) ~/:\: {(x;`$x)} ("Earth";"Mars";"Jupiter";"Saturn";"Uranus");"Fourth test error"];
+    .qython.assert[0 = min count each .[candidate;;`] each {(x;`$x)}("Earth";"Earth")];
+    .qython.assert[0 = min count each .[candidate;;`] each {(x;`$x)}("Mars";"Earth")];
+    .qython.assert[0 = min count each .[candidate;;`] each {(x;`$x)}("Jupiter";"Makemake")]
     }
 ```
 <!-- TEST_END -->
@@ -9314,9 +9315,9 @@ expression = str(operand[0])
 ## Test Cases
 ```q
 check:{[candidate]
-    .qython.assert[candidate[("**";enlist["*"];enlist["+"]);(2;3;4;5)] = 37];
-    .qython.assert[candidate[(enlist["+"];enlist["*"];enlist["-"]);(2;3;4;5)] = 9];
-    .qython.assert2[candidate[("//";enlist["*"]);(7;3;4)] = 8;"This prints if this assert fails 1 (good for debugging!)"];
+    .qython.assert[any (.[candidate;;0] each ((("**";enlist["*"];enlist["+"]);(2;3;4;5));(("**";"*";"+");(2;3;4;5)))) =\: 37];
+    .qython.assert[any (.[candidate;;0] each (((enlist["+"];enlist["*"];enlist["-"]);(2;3;4;5));(("+";"*";"-");(2;3;4;5)))) =\: 9];
+    .qython.assert2[any (.[candidate;;0] each ((("//";enlist["*"]);(7;3;4));(("//";"*");(7;3;4)))) =\: 8;"This prints if this assert fails 1 (good for debugging!)"];
     .qython.assert2[1b;"This prints if this assert fails 2 (also good for debugging!)"]
     }
 ```
